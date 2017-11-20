@@ -16,6 +16,7 @@ import java.io.*;
 
 public class Chess extends Application {
   private GraphicsContext out;
+  private Canvas screen;
 
   public static void main(String [] args) {
     launch(args);
@@ -26,7 +27,7 @@ public class Chess extends Application {
     window.setTitle("Chess");
 
     BorderPane rootPane = new BorderPane();
-    Canvas screen = new Canvas(800, 800);
+    screen = new Canvas(800, 800);
     Scene display = new Scene(rootPane, 800, 800);
     rootPane.getChildren().add(screen);
     out = screen.getGraphicsContext2D();
@@ -38,6 +39,7 @@ public class Chess extends Application {
   public void chessMain() {
     Piece [][] bobbyFisher = boardGen();
     printBoard(bobbyFisher);
+    interact(bobbyFisher);
   }
 
   public static Piece [][] boardGen() {
@@ -108,5 +110,24 @@ public class Chess extends Application {
         } //end if
       } //end for
     } //end for
+  } //end method
+
+  public void interact(Piece [][] in) {
+    screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+      Piece mover = null;
+      @Override
+      public void handle(MouseEvent event) {
+        int x = (int) event.getX() / 100;
+        int y = (int) event.getY() / 100;
+        if (mover == null) {
+          mover = in[y][x];
+          in[y][x] = null;
+        } else {
+          in[y][x] = mover;
+          mover = null;
+        } //end if/else
+        printBoard(in);
+      }
+    });
   }
-}
+} //end class
