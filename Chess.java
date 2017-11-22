@@ -81,10 +81,10 @@ public class Chess extends Application {
         for (int j = 0; j < 8; j += 2) {
           //graphics context prepared and used to draw a 100 by 100 pixel
           //square as a means of reference for each position on the board
-          out.setFill(Color.SADDLEBROWN);
+          out.setFill(Color.BURLYWOOD);
           out.fillRect(j * 100, i * 100, 100, 100);
           //same process with a different color for alternating color scheme
-          out.setFill(Color.BURLYWOOD);
+          out.setFill(Color.SADDLEBROWN);
           out.fillRect((j + 1) * 100, i * 100, 100, 100);
         } //end for
         //case of odd numbered row indicies
@@ -92,9 +92,10 @@ public class Chess extends Application {
         //j loop start modified to start at 1 for proper color scheme
         for (int j = 1; j < 8; j += 2) {
           //same process as above
-          out.setFill(Color.SADDLEBROWN);
-          out.fillRect(j * 100, i * 100, 100, 100);
           out.setFill(Color.BURLYWOOD);
+          out.fillRect(j * 100, i * 100, 100, 100);
+
+          out.setFill(Color.SADDLEBROWN);
           out.fillRect((j - 1) * 100, i * 100, 100, 100);
         } //end for
       } //end if/ else
@@ -123,11 +124,15 @@ public class Chess extends Application {
           mover = in[y][x];
           in[y][x] = null;
         } else {
-          in[y][x] = mover;
-          mover = null;
+          if (mover.move(x, y, in)) {
+            in[y][x] = mover;
+            mover = null;
+          } else {
+            System.out.println("Invalid move. Please try again.");
+          }
         } //end if/else
         printBoard(in);
-      }
-    });
-  }
+      } //end internal method
+    }); //end anonymous handler
+  } //end method
 } //end class
