@@ -22,11 +22,45 @@ public class Rook extends Piece {
     boolean clear = true;
     boolean case1 = super.getColumn() == x;
     boolean case2 = super.getRow() == y;
-    if (case1 || case2) {
+    if (case1) {
+      if (y > super.getRow()) {
+        for (int i = super.getRow(); i < y; i++) {
+          if (in[i][x] != null) {
+            clear = false;
+          }
+        }
+      } else if (super.getRow() > y) {
+        for (int i = y; i <= super.getRow(); i++) {
+          if (in[i][x] != null) {
+            clear = false;
+          }
+        }
+      }
+    } else if (case2) {
+      if (x > super.getColumn()) {
+        for (int i = super.getColumn(); i < x; i++) {
+          if (in[y][i] != null) {
+            clear = false;
+          }
+        }
+      } else if (super.getColumn() > x) {
+        for (int i = x; i < super.getColumn(); i++) {
+          if (in[y][i] != null) {
+            clear = false;
+          }
+        }
+      }
+    }
+
+    if (in[y][x] != null) {
+      clear = in[y][x].type() != this.type();
+    }
+
+    if ((case1 || case2) && clear) {
       super.setX(x);
       super.setY(y);
     }
-    return case1 || case2;
+    return (case1 || case2) && clear;
   } //end method
 
   public Image graphic() {
