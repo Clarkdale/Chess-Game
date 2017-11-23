@@ -133,6 +133,12 @@ public class Chess extends Application {
           if (mover.move(x, y, in)) {
             in[y][x] = mover;
             mover = null;
+            if (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0) {
+              out.setFill(Color.BURLYWOOD);
+            } else {
+              out.setFill(Color.SADDLEBROWN);
+            }
+            out.fillRect(x * 100, y * 100, 100, 100);
             out.drawImage(in[y][x].graphic(), x * 100, y * 100, 100, 100);
           } else {
             System.out.println("Invalid move. Please try again.");
