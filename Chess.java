@@ -122,16 +122,23 @@ public class Chess extends Application {
         int y = (int) event.getY() / 100;
         if (mover == null) {
           mover = in[y][x];
+          if (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0) {
+            out.setFill(Color.BURLYWOOD);
+          } else {
+            out.setFill(Color.SADDLEBROWN);
+          }
+          out.fillRect(x * 100, y * 100, 100, 100);
           in[y][x] = null;
         } else {
           if (mover.move(x, y, in)) {
             in[y][x] = mover;
             mover = null;
+            out.drawImage(in[y][x].graphic(), x * 100, y * 100, 100, 100);
           } else {
             System.out.println("Invalid move. Please try again.");
           }
         } //end if/else
-        printBoard(in);
+
       } //end internal method
     }); //end anonymous handler
   } //end method

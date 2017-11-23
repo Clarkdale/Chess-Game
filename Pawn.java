@@ -15,8 +15,27 @@ public class Pawn extends Piece {
   } //end method
 
 
-  public boolean move(int i, int j, Piece [][] in) {
-    return true;
+  public boolean move(int x, int y, Piece [][] in) {
+    boolean case0 = x == super.getColumn() && y == super.getRow();
+    boolean case1;
+    boolean case2;
+    boolean case3;
+    if (super.type()) {
+      case1 = super.getColumn() == x && super.getRow() - y == 2 && in[y][x] == null && in[y + 1][x] == null && moved == 0;
+      case2 = super.getColumn() == x && super.getRow() - y == 1 && in[y][x] == null;
+      case3 = (super.getColumn() - 1 == x || super.getColumn() + 1 == x) && super.getRow() - y == 1 && in[y][x] != null && !in[y][x].type();
+    } else {
+      case1 = super.getColumn() == x && y - super.getRow() == 2 && in[y][x] == null && in[y - 1][x] == null && moved == 0;
+      case2 = super.getColumn() == x && y - super.getRow() == 1 && in[y][x] == null;
+      case3 = (super.getColumn() - 1 == x || super.getColumn() + 1 == x) && y - super.getRow() == 1 && in[y][x] != null && in[y][x].type();
+    }
+
+    if (case1 || case2 || case3) {
+      super.setX(x);
+      super.setY(y);
+      moved++;
+    }
+    return case0 || case1 || case2 || case3;
   } //end method
 
   public Image graphic() {

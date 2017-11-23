@@ -30,8 +30,19 @@ public class Queen extends Piece {
     } //end if/else
   } //end method
 
-  public boolean move(int i, int j, Piece [][] in) {
-    return true;
+  public boolean move(int x, int y, Piece [][] in) {
+    boolean case1 = super.getColumn() == x;
+    boolean case2 = super.getRow() == y;
+    boolean case3 = super.getColumn() - x == super.getRow() - y;
+    boolean case4 = super.getColumn() - x == y - super.getRow();
+    boolean case5 = x - super.getColumn() == y - super.getRow();
+    boolean case6 = x - super.getColumn() == super.getRow() - y;
+    if (case1 || case2 || case3 || case4 || case5 || case6) {
+      super.setY(y);
+      super.setX(x);
+    }
+
+    return (case1 || case2 || case3 || case4 || case5 || case6);
   } //emd method
 
   public boolean type() {

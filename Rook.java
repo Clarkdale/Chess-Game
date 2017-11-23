@@ -18,8 +18,15 @@ public class Rook extends Piece {
     return super.getColumn();
   } //end method
 
-  public boolean move(int i, int j, Piece [][] in) {
-    return true;
+  public boolean move(int x, int y, Piece [][] in) {
+    boolean clear = true;
+    boolean case1 = super.getColumn() == x;
+    boolean case2 = super.getRow() == y;
+    if (case1 || case2) {
+      super.setX(x);
+      super.setY(y);
+    }
+    return case1 || case2;
   } //end method
 
   public Image graphic() {

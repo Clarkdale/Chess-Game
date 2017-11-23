@@ -18,12 +18,17 @@ public class Knight extends Piece {
     return super.getColumn();
   } //end method
 
-  public boolean move(int i, int j, Piece [][] check) {
-    boolean case1 = super.getRow() - 2 == j && (super.getColumn() == i + 1 || super.getColumn() == i - 1);
-    boolean case2 = super.getRow() + 2 == j && (super.getColumn() == i + 1 || super.getColumn() == i - 1);
-    boolean case3 = super.getRow() + 1 == j && (super.getColumn() == i + 2 || super.getColumn() == i - 2);
-    boolean case4 = super.getRow() + 1 == j && (super.getColumn() == i + 2 || super.getColumn() == i - 2);
-    return (case1 || case2 || case3 || case4);
+  public boolean move(int x, int y, Piece [][] check) {
+    boolean case0 = super.getRow() == y && super.getColumn() == x;
+    boolean case1 = super.getRow() - 2 == y && (super.getColumn() == x + 1 || super.getColumn() == x - 1);
+    boolean case2 = super.getRow() + 2 == y && (super.getColumn() == x + 1 || super.getColumn() == x - 1);
+    boolean case3 = super.getRow() + 1 == y && (super.getColumn() == x + 2 || super.getColumn() == x - 2);
+    boolean case4 = super.getRow() - 1 == y && (super.getColumn() == x + 2 || super.getColumn() == x - 2);
+    if (case0 || case1 || case2 || case3 || case4) {
+      super.setX(x);
+      super.setY(y);
+    }
+    return (case0 || case1 || case2 || case3 || case4);
   } //end method
 
   public Image graphic() {

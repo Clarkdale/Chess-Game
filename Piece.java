@@ -23,6 +23,14 @@ public abstract class Piece {
     return isWhite;
   }
 
+  public void setX(int k) {
+    column = k;
+  }
+
+  public void setY(int k) {
+    row = k;
+  }
+
   public abstract Image graphic();
 
   public abstract boolean move(int i, int j, Piece [][] in);

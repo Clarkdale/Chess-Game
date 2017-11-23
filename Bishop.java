@@ -28,7 +28,15 @@ public class Bishop extends Piece {
     } //end if/else
   } //end method
 
-  public boolean move(int i, int j, Piece [][] in) {
-    return true;
+  public boolean move(int x, int y, Piece [][] in) {
+    boolean case1 = super.getColumn() - x == super.getRow() - y;
+    boolean case2 = super.getColumn() - x == y - super.getRow();
+    boolean case3 = x - super.getColumn() == y - super.getRow();
+    boolean case4 = x - super.getColumn() == super.getRow() - y;
+    if (case1 || case2 || case3 || case4) {
+      super.setX(x);
+      super.setY(y);
+    }
+    return (case1 || case2 || case3 || case4);
   } //end method
 } //end class

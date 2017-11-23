@@ -32,7 +32,13 @@ public class King extends Piece {
     } //end if/else
   } //end method
 
-  public boolean move(int i, int j, Piece [][] in) {
-    return true;
+  public boolean move(int x, int y, Piece [][] in) {
+    boolean case0 = super.getColumn() == x && super.getRow() == y;
+    boolean case1 = super.getColumn() - x == 1 || super.getRow() - y == 1 || x - super.getColumn() == 1 || y - super.getRow() == 1;
+    if (case1) {
+      super.setX(x);
+      super.setY(y);
+    }
+    return case1 || case0;
   } //end method
 } //end class
