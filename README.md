@@ -1,4 +1,9 @@
 # Chess-Game
 Chess game developed using javafx for graphical interface. The initial board created with pieces
-and background is shown in the image below.
-![image]https://raw.github.com/Clarkdale/Chess-Game/Master/chess-start.png
+and background of beige and brown board squares, which can be seen in the issues section of this 
+repository. Alongside that, there are also images of the game working, with pawns moved on the next
+image, and example of restricted movement where a pawn was attempted to be moved to an invalid 
+location three spaces in front of it. In this sort of circumstance, a message was sent to 
+standard out stating, "Invalid Move." Mouse clicks on screen are fully functional, and progress
+is being made towards further restricting the movements of pieces and more customization of 
+the overall interface.
