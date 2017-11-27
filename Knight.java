@@ -19,16 +19,20 @@ public class Knight extends Piece {
   } //end method
 
   public boolean move(int x, int y, Piece [][] check) {
+    boolean clear = true;
     boolean case0 = super.getRow() == y && super.getColumn() == x;
     boolean case1 = super.getRow() - 2 == y && (super.getColumn() == x + 1 || super.getColumn() == x - 1);
     boolean case2 = super.getRow() + 2 == y && (super.getColumn() == x + 1 || super.getColumn() == x - 1);
     boolean case3 = super.getRow() + 1 == y && (super.getColumn() == x + 2 || super.getColumn() == x - 2);
     boolean case4 = super.getRow() - 1 == y && (super.getColumn() == x + 2 || super.getColumn() == x - 2);
+    if (check[y][x] != null) {
+      clear = check[y][x].type() != this.type();
+    }
     if (case0 || case1 || case2 || case3 || case4) {
       super.setX(x);
       super.setY(y);
     }
-    return (case0 || case1 || case2 || case3 || case4);
+    return case0 || ((case1 || case2 || case3 || case4) && clear);
   } //end method
 
   public Image graphic() {
