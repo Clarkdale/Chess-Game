@@ -6,6 +6,7 @@
   Parent Class:  Piece
 ====================================================================*/
 import javafx.scene.image.Image;
+import java.util.*;
 
 public class Queen extends Piece {
   public Queen(int i, int j, boolean type) {
@@ -30,19 +31,20 @@ public class Queen extends Piece {
     } //end if/else
   } //end method
 
-  public boolean move(int x, int y, Piece [][] in) {
-    boolean case1 = super.getColumn() == x;
-    boolean case2 = super.getRow() == y;
-    boolean case3 = super.getColumn() - x == super.getRow() - y;
-    boolean case4 = super.getColumn() - x == y - super.getRow();
-    boolean case5 = x - super.getColumn() == y - super.getRow();
-    boolean case6 = x - super.getColumn() == super.getRow() - y;
-    if (case1 || case2 || case3 || case4 || case5 || case6) {
-      super.setY(y);
-      super.setX(x);
+  public Set<Tuple> move(Piece [][] in) {
+    Rook rookRep = new Rook(super.getColumn(), super.getRow(), super.type());
+    Bishop bishopRep = new Bishop(super.getColumn(), super.getRow(), super.type());
+    Set<Tuple> case1 = rookRep.move(in);
+    Set<Tuple> case2 = bishopRep.move(in);
+    Set<Tuple> out = new HashSet<>();
+    for (Tuple rook : case1) {
+      out.add(rook);
     }
 
-    return (case1 || case2 || case3 || case4 || case5 || case6);
+    for (Tuple bishop : case2) {
+      out.add(bishop);
+    }
+    return out;
   } //emd method
 
   public boolean type() {

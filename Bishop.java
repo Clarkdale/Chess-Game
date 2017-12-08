@@ -4,6 +4,7 @@
   Parent Class:  Piece
 ====================================================================*/
 import javafx.scene.image.Image;
+import java.util.*;
 
 public class Bishop extends Piece {
   public Bishop(int i, int j, boolean type) {
@@ -28,43 +29,71 @@ public class Bishop extends Piece {
     } //end if/else
   } //end method
 
-  public boolean move(int x, int y, Piece [][] in) {
-    boolean clear = true;
-    boolean case1 = super.getColumn() - x == super.getRow() - y;
-    boolean case2 = super.getColumn() - x == y - super.getRow();
-    boolean case3 = x - super.getColumn() == y - super.getRow();
-    boolean case4 = x - super.getColumn() == super.getRow() - y;
+  public Set<Tuple> move(Piece [][] in) {
+    int currX = super.getColumn();
+    int currY = super.getRow();
 
-    if (case1 && x != super.getColumn() && super.getRow() != y) {
-      for (int i = 0; i < x; i++) {
-        if (in[super.getRow() - i][super.getColumn() - i] != null) {
-          clear = false;
+    Set<Tuple> out = new HashSet<>();
+
+    out.add(new Tuple(currX, currY));
+
+    boolean case1 = true;
+    boolean case2 = true;
+    boolean case3 = true;
+    boolean case4 = true;
+    for (int i = 0; i < 8; i++) {
+      if (currX - i >= 0) {
+        if (currY - i >= 0) {
+          if (in[currY - i][currX - i] != null) {
+            if (in[currY - i][currX - i].type() != super.type() && case1) {
+              out.add(new Tuple(currX - i, currY - i));
+            }
+            case1 = false;
+          }
+          if (case1) {
+            out.add(new Tuple(currX - i, currY - i));
+          }
+        }
+
+        if (currY + i <= 7) {
+          if (in[currY + i][currX - i] != null) {
+            if (in[currY + i][currX - i].type() != super.type() && case2) {
+              out.add(new Tuple(currX - i, currY + i));
+            }
+            case2 = false;
+          }
+          if (case2) {
+            out.add(new Tuple(currX - i, currY + i));
+          }
         }
       }
-    } else if (case2 && x != super.getColumn() && super.getRow() != y) {
-      for (int i = 0; i < super.getRow() - y; i++) {
-        if (in[y - i][super.getColumn() + i] != null) {
-          clear = false;
+
+      if (currX + i <= 7) {
+        if (currY - i >= 0) {
+          if (in[currY - i][currX + i] != null) {
+            if (in[currY - i][currX + i].type() != super.type() && case3) {
+              out.add(new Tuple(currX + i, currY - i));
+            }
+            case3 = false;
+          }
+          if (case3) {
+            out.add(new Tuple(currX + i, currY - i));
+          }
         }
-      }
-    } else if (case3 && x != super.getColumn() && super.getRow() != y) {
-      for (int i = 0; i < x - super.getColumn(); i++) {
-        if (in[y - i][x - i] != null) {
-          clear = false;
-        }
-      }
-    } else if (case4 && x != super.getColumn() && super.getRow() != y) {
-      for (int i = 0; i < super.getRow() - y; i++) {
-        if (in[x - i][super.getRow() - i] != null) {
-          clear = false;
+
+        if (currY + i <= 7) {
+          if (in[currY + i][currX + i] != null) {
+            if (in[currY + i][currX + i].type() != super.type() && case4) {
+              out.add(new Tuple(currX + i, currY + i));
+            }
+            case4 = false;
+          }
+          if (case4) {
+            out.add(new Tuple(currX + i, currY + i));
+          }
         }
       }
     }
-
-    if ((case1 || case2 || case3 || case4) && clear) {
-      super.setX(x);
-      super.setY(y);
-    }
-    return (case1 || case2 || case3 || case4) && clear;
+    return out;
   } //end method
 } //end class

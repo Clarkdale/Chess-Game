@@ -4,7 +4,7 @@
   Parent Class:  Piece
 ====================================================================*/
 import javafx.scene.image.Image;
-
+import java.util.*;
 public class King extends Piece {
   public King(int i, int j, boolean type) {
     super(i, j, type);
@@ -32,13 +32,59 @@ public class King extends Piece {
     } //end if/else
   } //end method
 
-  public boolean move(int x, int y, Piece [][] in) {
-    boolean case0 = super.getColumn() == x && super.getRow() == y;
-    boolean case1 = super.getColumn() - x == 1 || super.getRow() - y == 1 || x - super.getColumn() == 1 || y - super.getRow() == 1;
-    if (case1) {
-      super.setX(x);
-      super.setY(y);
+  public Set<Tuple> move(Piece [][] in) {
+    int currX = super.getColumn();
+    int currY = super.getRow();
+    Set<Tuple> out = new HashSet<>();
+    out.add(new Tuple(currX, currY));
+
+    if (currX - 1 >= 0) {
+      if (currY - 1 >= 0) {
+        if (in[currY - 1][currX - 1] == null || in[currY - 1][currX - 1].type() != super.type()) {
+          out.add(new Tuple(currX - 1, currY - 1));
+        }
+      }
+
+      if (currY + 1 <= 7) {
+        if (in[currY + 1][currX - 1] == null || in[currY + 1][currX - 1].type() != super.type()) {
+          out.add(new Tuple(currX - 1, currY + 1));
+        }
+      }
+
+      if (in[currY][currX - 1] == null || in[currY][currX - 1].type() != super.type()) {
+        out.add(new Tuple(currX - 1, currY));
+      }
     }
-    return case1 || case0;
+
+    if (currX + 1 <= 7) {
+      if (currY - 1 >= 0) {
+        if (in[currY - 1][currX + 1] == null || in[currY - 1][currX + 1].type() != super.type()) {
+          out.add(new Tuple(currX + 1, currY - 1));
+        }
+      }
+
+      if (currY + 1 <= 7) {
+        if (in[currY + 1][currX + 1] == null || in[currY + 1][currX + 1].type() != super.type()) {
+          out.add(new Tuple(currX + 1, currY + 1));
+        }
+      }
+
+      if (in[currY][currX + 1] == null || in[currY][currX + 1].type() != super.type()) {
+        out.add(new Tuple(currX + 1, currY));
+      }
+    }
+
+    if (currY - 1 >= 0) {
+      if (in[currY - 1][currX] == null || in[currY - 1][currX].type() != super.type()) {
+        out.add(new Tuple(currX, currY - 1));
+      }
+    }
+
+    if (currY + 1 <= 7) {
+      if (in[currY + 1][currX] == null || in[currY + 1][currX].type() != super.type()) {
+        out.add(new Tuple(currX, currY + 1));
+      }
+    }
+    return out;
   } //end method
 } //end class
