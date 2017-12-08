@@ -4,6 +4,7 @@
   Parent Class:  Piece
 ====================================================================*/
 import javafx.scene.image.Image;
+import java.util.*;
 
 public class Rook extends Piece {
   public Rook(int i, int j, boolean type) {
@@ -18,49 +19,68 @@ public class Rook extends Piece {
     return super.getColumn();
   } //end method
 
-  public boolean move(int x, int y, Piece [][] in) {
+  public Set<Tuple> move(Piece [][] in) {
+    Set<Tuple> possible = new HashSet<>();
+    int currX = super.getColumn();
+    int currY = super.getRow();
     boolean clear = true;
-    boolean case1 = super.getColumn() == x;
-    boolean case2 = super.getRow() == y;
-    if (case1) {
-      if (y > super.getRow()) {
-        for (int i = super.getRow(); i < y; i++) {
-          if (in[i][x] != null) {
-            clear = false;
+    possible.add(new Tuple(currX, currY));
+    boolean case1 = true;
+    boolean case2 = true;
+    boolean case3 = true;
+    boolean case4 = true;
+    for (int i = 0; i < 8; i++) {
+      if (currY - i >= 0) {
+        if (in[currY - i][currX] != null) {
+          if (in[currY - i][currX].type() != super.type() && case1) {
+            possible.add(new Tuple(currX, currY - i));
           }
+          case1 = false;
         }
-      } else if (super.getRow() > y) {
-        for (int i = y; i <= super.getRow(); i++) {
-          if (in[i][x] != null) {
-            clear = false;
-          }
+        if (case1) {
+          possible.add(new Tuple(currX, currY - i));
         }
       }
-    } else if (case2) {
-      if (x > super.getColumn()) {
-        for (int i = super.getColumn(); i < x; i++) {
-          if (in[y][i] != null) {
-            clear = false;
+
+      if (currY + i <= 7) {
+        if (in[currY + i][currX] != null) {
+          if (in[currY + i][currX].type() != super.type() && case2) {
+            possible.add(new Tuple(currX, currY + i));
           }
+          case2 = false;
         }
-      } else if (super.getColumn() > x) {
-        for (int i = x; i < super.getColumn(); i++) {
-          if (in[y][i] != null) {
-            clear = false;
+        if (case2) {
+          possible.add(new Tuple(currX, currY + i));
+        }
+      }
+
+
+      if (currX - i >= 0) {
+        if (in[currY][currX - i] != null) {
+          if (in[currY][currX - i].type() != super.type() && case3) {
+            possible.add(new Tuple(currX - i, currY));
           }
+          case3 = false;
+        }
+        if (case3) {
+          possible.add(new Tuple(currX - i, currY));
+        }
+      }
+
+      if (currX + i <= 7) {
+        if (in[currY][currX + i] != null) {
+          if (in[currY][currX + i].type() != super.type() && case4) {
+            possible.add(new Tuple(currX + i, currY));
+          }
+          case4 = false;
+        }
+        if (case4) {
+          possible.add(new Tuple(currX + i, currY));
         }
       }
     }
 
-    if (in[y][x] != null) {
-      clear = in[y][x].type() != this.type();
-    }
-
-    if ((case1 || case2) && clear) {
-      super.setX(x);
-      super.setY(y);
-    }
-    return (case1 || case2) && clear;
+    return possible;
   } //end method
 
   public Image graphic() {
