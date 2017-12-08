@@ -4,6 +4,7 @@
   Parent Class:  Piece
 ====================================================================*/
 import javafx.scene.image.Image;
+import java.util.*;
 
 public class Knight extends Piece {
   public Knight(int k, int l, boolean color) {
@@ -18,21 +19,69 @@ public class Knight extends Piece {
     return super.getColumn();
   } //end method
 
-  public boolean move(int x, int y, Piece [][] check) {
-    boolean clear = true;
-    boolean case0 = super.getRow() == y && super.getColumn() == x;
-    boolean case1 = super.getRow() - 2 == y && (super.getColumn() == x + 1 || super.getColumn() == x - 1);
-    boolean case2 = super.getRow() + 2 == y && (super.getColumn() == x + 1 || super.getColumn() == x - 1);
-    boolean case3 = super.getRow() + 1 == y && (super.getColumn() == x + 2 || super.getColumn() == x - 2);
-    boolean case4 = super.getRow() - 1 == y && (super.getColumn() == x + 2 || super.getColumn() == x - 2);
-    if (check[y][x] != null) {
-      clear = check[y][x].type() != this.type();
+  public Set<Tuple> move(Piece [][] in) {
+    int currX = super.getColumn();
+    int currY = super.getRow();
+    Set<Tuple> out = new HashSet<>();
+    out.add(new Tuple(currX, currY));
+    if (currX - 2 >= 0) {
+      if (currY - 1 >= 0) {
+        if (in[currY - 1][currX - 2] == null || in[currY - 1][currX - 2].type() != super.type()) {
+          out.add(new Tuple(currX - 2, currY - 1));
+        }
+      }
+
+      if (currY + 1 <= 7) {
+        if (in[currY + 1][currX - 2] == null || in[currY + 1][currX - 2].type() != super.type()) {
+          out.add(new Tuple(currX - 2, currY + 1));
+        }
+      }
     }
-    if (case0 || case1 || case2 || case3 || case4) {
-      super.setX(x);
-      super.setY(y);
+
+    if (currX + 2 <= 7) {
+      if (currY - 1 >= 0) {
+        if (in[currY - 1][currX + 2] == null || in[currY - 1][currX + 2].type() != super.type()) {
+          out.add(new Tuple(currX + 2, currY - 1));
+        }
+      }
+
+      if (currY + 1 <= 7) {
+        if (in[currY + 1][currX + 2] == null || in[currY + 1][currX + 2].type() != super.type()) {
+          out.add(new Tuple(currX + 2, currY + 1));
+        }
+      }
     }
-    return case0 || ((case1 || case2 || case3 || case4) && clear);
+
+    if (currY - 2 >= 0) {
+      if (currX - 1 >= 0) {
+        if (in[currY - 2][currX - 1] == null || in[currY - 2][currX - 1].type() != super.type()) {
+          out.add(new Tuple(currX - 1, currY - 2));
+        }
+      }
+
+      if (currX + 1 <= 7) {
+        if (in[currY - 2][currX + 1] == null || in[currY - 2][currX + 1].type() != super.type()) {
+          out.add(new Tuple(currX + 1, currY - 2));
+        }
+      }
+    }
+
+    if (currY + 2 <= 7) {
+      if (currX - 1 >= 0) {
+        if (in[currY + 2][currX - 1] == null || in[currY + 2][currX - 1].type() != super.type()) {
+          out.add(new Tuple(currX - 1, currY + 2));
+        }
+      }
+
+      if (currX + 1 <= 7) {
+        if (in[currY + 2][currX + 1] == null || in[currY + 2][currX + 1].type() != super.type()) {
+          out.add(new Tuple(currX + 1, currY + 2));
+        }
+      }
+    }
+
+
+    return out;
   } //end method
 
   public Image graphic() {
