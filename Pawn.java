@@ -32,14 +32,18 @@ public class Pawn extends Piece {
         moved++;
       }
 
-      if (in[currY - 1][currX - 1] != null && !in[currY - 1][currX - 1].type()) {
-        possible.add(new Tuple(currX - 1, currY - 1));
-        moved ++;
+      if (currX != 0) {
+        if (in[currY - 1][currX - 1] != null && !in[currY - 1][currX - 1].type()) {
+          possible.add(new Tuple(currX - 1, currY - 1));
+          moved ++;
+        }
       }
 
-      if (in[currY - 1][currX + 1] != null && !in[currY - 1][currX + 1].type()) {
-        possible.add(new Tuple(currX + 1, currY - 1));
-        moved++;
+      if (currX != 7) {
+        if (in[currY - 1][currX + 1] != null && !in[currY - 1][currX + 1].type()) {
+          possible.add(new Tuple(currX + 1, currY - 1));
+          moved++;
+        }
       }
 
     } else {
@@ -52,15 +56,18 @@ public class Pawn extends Piece {
         possible.add(new Tuple(currX, currY + 2));
         moved++;
       }
-
-      if (in[currY + 1][currX - 1] != null && in[currY + 1][currX - 1].type()) {
-        possible.add(new Tuple(currX - 1, currY + 1));
-        moved ++;
+      if (currX != 0) {
+        if (in[currY + 1][currX - 1] != null && in[currY + 1][currX - 1].type()) {
+          possible.add(new Tuple(currX - 1, currY + 1));
+          moved ++;
+        }
       }
 
-      if (in[currY + 1][currX + 1] != null && in[currY + 1][currX + 1].type()) {
-        possible.add(new Tuple(currX + 1, currY + 1));
-        moved++;
+      if (currX != 7) {
+        if (in[currY + 1][currX + 1] != null && in[currY + 1][currX + 1].type()) {
+          possible.add(new Tuple(currX + 1, currY + 1));
+          moved++;
+        }
       }
     }
 
