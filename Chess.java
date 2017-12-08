@@ -13,6 +13,7 @@ import javafx.event.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.*;
 import java.io.*;
+import java.util.*;
 
 public class Chess extends Application {
   private GraphicsContext out;
@@ -20,7 +21,7 @@ public class Chess extends Application {
 
   public static void main(String [] args) {
     launch(args);
-  }
+  } //end method
 
   /*====================================================================
      Method Name:  start
@@ -191,6 +192,7 @@ public class Chess extends Application {
     screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       //mover will be the piece the user clicks to move around screen
       Piece mover = null;
+      Set<Tuple> potential = null;
 
       //actual method for using the mouse to move pieces around
       @Override
@@ -201,7 +203,6 @@ public class Chess extends Application {
         //allowing for this pixel value / 100 invariant to be true.
         int x = (int) event.getX() / 100;
         int y = (int) event.getY() / 100;
-
         //this boolean catches if the user has not selected a piece yet,
         //upon which the mover variable is reset, and the board is drawing
         //over to remove where the piecec was.
@@ -226,37 +227,26 @@ public class Chess extends Application {
           //consistency in gameplay
           in[y][x] = null;
 
+          potential = mover.move(in);
+
+          for (Tuple space : potential) {
+            out.setFill(Color.rgb(0, 0, 100, 0.5));
+            out.fillRect(space.getFirst() * 100, space.getSecond() * 100, 100, 100);
+          }
         //If the user already has a piece "in hand," or really stored to
         //the mover here, then the process of moving the piece is followed
         //within this else statement.
         } else {
-          //this internal boolean check uses the move method from the
-          //piece class to determine if a move is "valid."
-          if (mover.move(x, y, in)) {
-            //resets background 2D array for consistency
+          Tuple clicked = new Tuple(x, y);
+          if (potential.contains(clicked)) {
+            mover.setX(x);
+            mover.setY(y);
             in[y][x] = mover;
-            //removes piece from mover variable so the user can pick
-            //up other pieces after this
             mover = null;
-
-            //Again, this boolean logic is used to avoid redrawing then
-            //entire board after one click from the user
-            if (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0) {
-              out.setFill(Color.BURLYWOOD);
-            } else {
-              out.setFill(Color.SADDLEBROWN);
-            } //end if/else
-
-            //The process of drawing the new square, followed by the
-            //appropriate piece. The square must be covered in the event
-            //that there was a piece in the square the user clicked on
-            out.fillRect(x * 100, y * 100, 100, 100);
-            out.drawImage(in[y][x].graphic(), x * 100, y * 100, 100, 100);
-
-          //Else statement prints an error to the user with standard out
+            printBoard(in);
           } else {
-            System.out.println("Invalid move. Please try again.");
-          } //end if/ else
+            System.out.println("Invalid move.");
+          }
         } //end if/else
       } //end internal method
     }); //end anonymous handler

@@ -4,6 +4,7 @@
   Parent Class:  Piece
 ====================================================================*/
 import javafx.scene.image.Image;
+import java.util.*;
 
 public class Pawn extends Piece {
   private int moved;
@@ -15,27 +16,55 @@ public class Pawn extends Piece {
   } //end method
 
 
-  public boolean move(int x, int y, Piece [][] in) {
-    boolean case0 = x == super.getColumn() && y == super.getRow();
-    boolean case1;
-    boolean case2;
-    boolean case3;
+  public Set<Tuple> move(Piece [][] in) {
+    int currX = super.getColumn();
+    int currY = super.getRow();
+    Set<Tuple> possible = new HashSet<>();
+    possible.add(new Tuple(currX, currY));
     if (super.type()) {
-      case1 = super.getColumn() == x && super.getRow() - y == 2 && in[y][x] == null && in[y + 1][x] == null && moved == 0;
-      case2 = super.getColumn() == x && super.getRow() - y == 1 && in[y][x] == null;
-      case3 = (super.getColumn() - 1 == x || super.getColumn() + 1 == x) && super.getRow() - y == 1 && in[y][x] != null && !in[y][x].type();
+      if (in[currY - 1][currX] == null) {
+        possible.add(new Tuple(currX, currY - 1));
+        moved++;
+      }
+
+      if (moved <= 1 && in[currY - 2][currX] == null && in[currY - 1][currX] == null) {
+        possible.add(new Tuple(currX, currY - 2));
+        moved++;
+      }
+
+      if (in[currY - 1][currX - 1] != null && !in[currY - 1][currX - 1].type()) {
+        possible.add(new Tuple(currX - 1, currY - 1));
+        moved ++;
+      }
+
+      if (in[currY - 1][currX + 1] != null && !in[currY - 1][currX + 1].type()) {
+        possible.add(new Tuple(currX + 1, currY - 1));
+        moved++;
+      }
+
     } else {
-      case1 = super.getColumn() == x && y - super.getRow() == 2 && in[y][x] == null && in[y - 1][x] == null && moved == 0;
-      case2 = super.getColumn() == x && y - super.getRow() == 1 && in[y][x] == null;
-      case3 = (super.getColumn() - 1 == x || super.getColumn() + 1 == x) && y - super.getRow() == 1 && in[y][x] != null && in[y][x].type();
+      if (in[currY + 1][currX] == null) {
+        possible.add(new Tuple(currX, currY + 1));
+        moved++;
+      }
+
+      if (moved <= 1 && in[currY + 2][currX] == null && in[currY + 1][currX] == null) {
+        possible.add(new Tuple(currX, currY + 2));
+        moved++;
+      }
+
+      if (in[currY + 1][currX - 1] != null && in[currY + 1][currX - 1].type()) {
+        possible.add(new Tuple(currX - 1, currY + 1));
+        moved ++;
+      }
+
+      if (in[currY + 1][currX + 1] != null && in[currY + 1][currX + 1].type()) {
+        possible.add(new Tuple(currX + 1, currY + 1));
+        moved++;
+      }
     }
 
-    if (case1 || case2 || case3) {
-      super.setX(x);
-      super.setY(y);
-      moved++;
-    }
-    return case0 || case1 || case2 || case3;
+    return possible;
   } //end method
 
   public Image graphic() {

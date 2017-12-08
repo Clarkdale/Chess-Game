@@ -1,4 +1,5 @@
 import javafx.scene.image.Image;
+import java.util.*;
 
 public abstract class Piece {
   private int row;
@@ -33,5 +34,5 @@ public abstract class Piece {
 
   public abstract Image graphic();
 
-  public abstract boolean move(int i, int j, Piece [][] in);
+  public abstract Set<Tuple> move(Piece [][] in);
 }
