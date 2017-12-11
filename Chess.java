@@ -210,19 +210,6 @@ public class Chess extends Application {
           //resetting of var
           mover = in[y][x];
 
-          //these internal boolean checks decide what color the square
-          //click on needs to beccome, and the square is covered,
-          //in order to avoid redrawing the board every single time a
-          //click is made.
-          if (y % 2 == 0 && x % 2 == 0 || y % 2 != 0 && x % 2 != 0) {
-            out.setFill(Color.BURLYWOOD);
-          } else {
-            out.setFill(Color.SADDLEBROWN);
-          } //end if/ else
-
-          //call to fill the squre clicked on
-          out.fillRect(x * 100, y * 100, 100, 100);
-
           //resetting of position in the background 2D array to maintain
           //consistency in gameplay
           in[y][x] = null;
@@ -230,7 +217,11 @@ public class Chess extends Application {
           potential = mover.move(in);
 
           for (Tuple space : potential) {
-            out.setFill(Color.rgb(0, 0, 100, 0.5));
+            if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
+              out.setFill(Color.rgb(0, 100, 0, 0.75));
+            } else {
+              out.setFill(Color.rgb(0, 0, 100, 0.75));
+            }
             out.fillRect(space.getFirst() * 100, space.getSecond() * 100, 100, 100);
           }
         //If the user already has a piece "in hand," or really stored to
