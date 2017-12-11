@@ -12,7 +12,7 @@ public class Pawn extends Piece {
 
   public Pawn(int k, int l, boolean color) {
     super(k, l, color);
-    moved = 0;
+    moved = 1;
   } //end method
 
 
@@ -24,49 +24,41 @@ public class Pawn extends Piece {
     if (super.type()) {
       if (in[currY - 1][currX] == null) {
         possible.add(new Tuple(currX, currY - 1));
-        moved++;
       }
 
       if (moved <= 1 && in[currY - 2][currX] == null && in[currY - 1][currX] == null) {
         possible.add(new Tuple(currX, currY - 2));
-        moved++;
       }
 
       if (currX != 0) {
         if (in[currY - 1][currX - 1] != null && !in[currY - 1][currX - 1].type()) {
           possible.add(new Tuple(currX - 1, currY - 1));
-          moved ++;
         }
       }
 
       if (currX != 7) {
         if (in[currY - 1][currX + 1] != null && !in[currY - 1][currX + 1].type()) {
           possible.add(new Tuple(currX + 1, currY - 1));
-          moved++;
         }
       }
 
     } else {
       if (in[currY + 1][currX] == null) {
         possible.add(new Tuple(currX, currY + 1));
-        moved++;
       }
 
       if (moved <= 1 && in[currY + 2][currX] == null && in[currY + 1][currX] == null) {
         possible.add(new Tuple(currX, currY + 2));
-        moved++;
       }
       if (currX != 0) {
         if (in[currY + 1][currX - 1] != null && in[currY + 1][currX - 1].type()) {
           possible.add(new Tuple(currX - 1, currY + 1));
-          moved ++;
         }
       }
 
       if (currX != 7) {
         if (in[currY + 1][currX + 1] != null && in[currY + 1][currX + 1].type()) {
           possible.add(new Tuple(currX + 1, currY + 1));
-          moved++;
         }
       }
     }
@@ -83,6 +75,13 @@ public class Pawn extends Piece {
       return (new Image("BlackPawn.png"));
     } //end if/else
   } //end method
+
+  public void setY(int in) {
+    if (in != super.getRow()) {
+      moved++;
+    }
+    super.setY(in);
+  }
 
   public boolean type() {
     return super.type();
