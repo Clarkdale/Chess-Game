@@ -79,8 +79,6 @@ public class Knight extends Piece {
         }
       }
     }
-
-
     return out;
   } //end method
 
