@@ -22,7 +22,7 @@ public class Tuple {
     result = prime * result + first;
     result = prime * result + second;
     return result;
-    }
+  }
 
   @Override
   public boolean equals(Object obj) {

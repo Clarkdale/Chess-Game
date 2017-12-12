@@ -70,8 +70,9 @@ public class Chess extends Application {
   ====================================================================*/
   public void chessMain() {
     Piece [][] bobbyFisher = boardGen();
+    Computer opponent = new Computer(bobbyFisher);
     printBoard(bobbyFisher);
-    interact(bobbyFisher);
+    interact(bobbyFisher, opponent);
   } //end method
 
   /*====================================================================
@@ -185,7 +186,7 @@ public class Chess extends Application {
                    button at some point
          Returns:  None
   ====================================================================*/
-  public void interact(Piece [][] in) {
+  public void interact(Piece [][] in, Computer black) {
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
@@ -207,22 +208,32 @@ public class Chess extends Application {
         //upon which the mover variable is reset, and the board is drawing
         //over to remove where the piecec was.
         if (mover == null) {
+
           //resetting of var
           mover = in[y][x];
 
           //resetting of position in the background 2D array to maintain
           //consistency in gameplay
-          in[y][x] = null;
+          if (mover.type()) {
+            in[y][x] = null;
 
-          potential = mover.move(in);
+            potential = mover.move(in);
 
-          for (Tuple space : potential) {
-            if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
-              out.setFill(Color.rgb(0, 100, 0, 0.75));
-            } else {
-              out.setFill(Color.rgb(0, 0, 100, 0.75));
+            for (Tuple space : potential) {
+              if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
+                out.setFill(Color.rgb(100, 100, 100, 0.75));
+                out.fillRect(space.getFirst() * 100, space.getSecond() * 100, 100, 100);
+                out.drawImage(mover.graphic(), mover.getColumn() * 100, mover.getRow() * 100, 100, 100);
+              } else {
+                out.setFill(Color.AQUAMARINE);
+                out.setStroke(Color.WHITE);
+                out.fillOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
+                out.strokeOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
+              }
             }
-            out.fillRect(space.getFirst() * 100, space.getSecond() * 100, 100, 100);
+          } else {
+            mover = null;
+            System.out.println("This is not your piece.");
           }
         //If the user already has a piece "in hand," or really stored to
         //the mover here, then the process of moving the piece is followed
@@ -232,8 +243,13 @@ public class Chess extends Application {
           if (potential.contains(clicked)) {
             mover.setX(x);
             mover.setY(y);
+            if (in[y][x] != null) {
+              black.removePiece(in[y][x]);
+            }
             in[y][x] = mover;
             mover = null;
+            printBoard(in);
+            black.makeMove();
             printBoard(in);
           } else {
             System.out.println("Invalid move.");
