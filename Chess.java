@@ -214,7 +214,7 @@ public class Chess extends Application {
 
           //resetting of position in the background 2D array to maintain
           //consistency in gameplay
-          if (mover.type()) {
+          if (mover != null && mover.type()) {
             in[y][x] = null;
 
             potential = mover.move(in);
@@ -249,6 +249,8 @@ public class Chess extends Application {
             in[y][x] = mover;
             mover = null;
             printBoard(in);
+
+            //move is made by the computer with the following statement
             black.makeMove();
             printBoard(in);
           } else {
