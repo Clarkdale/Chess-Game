@@ -31,19 +31,36 @@ public class Queen extends Piece {
     } //end if/else
   } //end method
 
+  /*====================================================================
+     Method Name:  move
+         Purpose:  Creates a set of tuples, which hold (x.y) positions
+                   on the board as to where this type of piece could
+                   potentially move. Essentially a "scan board" method
+      Parameters:  in: A 2D array of pieces, which represent the board
+         Returns:  A set of tuples of all possible moves
+  ====================================================================*/
   public Set<Tuple> move(Piece [][] in) {
+    //Rook and Bishop objects are created to handle adding moves to the moveset
+    //for this piece
     Rook rookRep = new Rook(super.getColumn(), super.getRow(), super.type());
     Bishop bishopRep = new Bishop(super.getColumn(), super.getRow(), super.type());
+
+    //Sets for piece representations extracted into variablesto add to an overall
+    //output set
     Set<Tuple> case1 = rookRep.move(in);
     Set<Tuple> case2 = bishopRep.move(in);
     Set<Tuple> out = new HashSet<>();
+
+    //Adding tuples from rook into the overall set
     for (Tuple rook : case1) {
       out.add(rook);
-    }
+    } //end for
 
+    //adding tuples from bishop to the overall set
     for (Tuple bishop : case2) {
       out.add(bishop);
-    }
+    } //end for
+    
     return out;
   } //emd method
 
