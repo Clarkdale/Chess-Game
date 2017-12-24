@@ -70,9 +70,9 @@ public class Chess extends Application {
   ====================================================================*/
   public void chessMain() {
     Piece [][] bobbyFisher = boardGen();
-    Computer opponent = new Computer(bobbyFisher);
+
     printBoard(bobbyFisher);
-    interact(bobbyFisher, opponent);
+    interact(bobbyFisher);
   } //end method
 
   /*====================================================================
@@ -186,7 +186,7 @@ public class Chess extends Application {
                    button at some point
          Returns:  None
   ====================================================================*/
-  public void interact(Piece [][] in, Computer black) {
+  public void interact(Piece [][] in) {
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
@@ -214,7 +214,7 @@ public class Chess extends Application {
 
           //resetting of position in the background 2D array to maintain
           //consistency in gameplay
-          if (mover != null && mover.type()) {
+          if (mover != null) {
             in[y][x] = null;
 
             potential = mover.move(in);
@@ -231,10 +231,8 @@ public class Chess extends Application {
                 out.strokeOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
               }
             }
-          } else {
-            mover = null;
-            System.out.println("This is not your piece.");
           }
+
         //If the user already has a piece "in hand," or really stored to
         //the mover here, then the process of moving the piece is followed
         //within this else statement.
@@ -243,15 +241,13 @@ public class Chess extends Application {
           if (potential.contains(clicked)) {
             mover.setX(x);
             mover.setY(y);
-            if (in[y][x] != null) {
-              black.removePiece(in[y][x]);
-            }
+
             in[y][x] = mover;
             mover = null;
             printBoard(in);
 
             //move is made by the computer with the following statement
-            black.makeMove();
+          
             printBoard(in);
           } else {
             System.out.println("Invalid move.");
