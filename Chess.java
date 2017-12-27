@@ -18,6 +18,7 @@ import java.util.*;
 public class Chess extends Application {
   private GraphicsContext out;
   private Canvas screen;
+  private boolean turn;
 
   public static void main(String [] args) {
     launch(args);
@@ -190,6 +191,9 @@ public class Chess extends Application {
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
+
+    turn = true;
+
     screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       //mover will be the piece the user clicks to move around screen
       Piece mover = null;
@@ -208,9 +212,15 @@ public class Chess extends Application {
         //upon which the mover variable is reset, and the board is drawing
         //over to remove where the piecec was.
         if (mover == null) {
+          //this check will determine which player's turn it is
+          if (in[y][x].type() == turn) {
+            mover = in[y][x];
 
-          //resetting of var
-          mover = in[y][x];
+          //otherwise a message is output to user that the wrong
+          //color piece is being selected
+          } else {
+            System.out.println("It is not your turn.");
+          } //end if/else
 
           //resetting of position in the background 2D array to maintain
           //consistency in gameplay
@@ -219,39 +229,60 @@ public class Chess extends Application {
 
             potential = mover.move(in);
 
+            //this for loop will parse over all the possible moves,
+            //and highlight where the player can move based on
+            //which piece was selected.
             for (Tuple space : potential) {
+              //the position of the original piece is highlighted
+              //with this space
               if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
                 out.setFill(Color.rgb(100, 100, 100, 0.75));
                 out.fillRect(space.getFirst() * 100, space.getSecond() * 100, 100, 100);
                 out.drawImage(mover.graphic(), mover.getColumn() * 100, mover.getRow() * 100, 100, 100);
+
+              //all other possible moves are highlighted using
+              //sea foam green circles
               } else {
                 out.setFill(Color.AQUAMARINE);
                 out.setStroke(Color.WHITE);
                 out.fillOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
                 out.strokeOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
-              }
-            }
-          }
+              } //end if/else
+            } //end for
+          } //end if
 
         //If the user already has a piece "in hand," or really stored to
         //the mover here, then the process of moving the piece is followed
         //within this else statement.
         } else {
           Tuple clicked = new Tuple(x, y);
+
+          //if the user selects an appropriate space, the following
+          //is exectued
           if (potential.contains(clicked)) {
+
+            //logic to flip turn after a user inputs a move
+            if (mover.getColumn() != x || mover.getRow() != y) {
+              turn = !turn;
+            } //end if
+
+            //these statements will changeg the piece object
+            //according to where it was moved on the board
             mover.setX(x);
             mover.setY(y);
 
+            //board is adjusted after move to fully represent game
             in[y][x] = mover;
+
+            //mover is reset to null for next move
             mover = null;
-            printBoard(in);
 
             //move is made by the computer with the following statement
-          
+
             printBoard(in);
           } else {
             System.out.println("Invalid move.");
-          }
+          } //end if/else
         } //end if/else
       } //end internal method
     }); //end anonymous handler
