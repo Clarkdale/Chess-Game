@@ -37,7 +37,7 @@ public class Chess extends Application {
   @Override
   public void start(Stage window) {
     window.setTitle("Chess");
-
+    window.getIcons().add(new Image("BlackKnight.png"));
     //overall borderpain created
     BorderPane rootPane = new BorderPane();
 
@@ -188,12 +188,13 @@ public class Chess extends Application {
          Returns:  None
   ====================================================================*/
   public void interact(Piece [][] in) {
+    //the first turn is set to be true, to reflect that the game
+    //starts with white moving first
+    turn = true;
+
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
-
-    turn = true;
-
     screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       //mover will be the piece the user clicks to move around screen
       Piece mover = null;
