@@ -6,9 +6,38 @@
 import javafx.scene.image.Image;
 import java.util.*;
 public class King extends Piece {
+  private boolean check;
+  private int moved;
+
   public King(int i, int j, boolean type) {
     super(i, j, type);
+    check = false;
+    moved = 0;
   } //end method
+
+  public void setX(int in) {
+    if (in != super.getColumn()) {
+      moved++;
+    }
+
+    super.setX(in);
+  }
+
+  public void setY(int in) {
+    if (in != super.getRow()) {
+      moved++;
+    }
+
+    super.setY(in);
+  }
+
+  public void setCheck(boolean in) {
+    check = in;
+  }
+
+  public boolean inCheck() {
+    return check;
+  }
 
   public int getRow() {
     return super.getRow();
@@ -21,6 +50,10 @@ public class King extends Piece {
   public boolean type() {
     return super.type();
   } //end method
+
+  public boolean castle() {
+    return moved == 0;
+  }
 
   public Image graphic() {
     if (super.type()) {
@@ -105,6 +138,14 @@ public class King extends Piece {
         out.add(new Tuple(currX, currY + 1));
       } //end if
     } //end if
+
+    if (moved == 0) {
+      if (super.type() && in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
+        out.add(new Tuple(currX + 2, currY));
+      } else if (!super.type() && in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
+        out.add(new Tuple(currX + 2, currY));
+      }
+    }
 
     return out;
   } //end method
