@@ -214,14 +214,16 @@ public class Chess extends Application {
         //over to remove where the piecec was.
         if (mover == null) {
           //this check will determine which player's turn it is
-          if (in[y][x].type() == turn) {
-            mover = in[y][x];
+          if (in[y][x] != null) {
+            if (in[y][x].type() == turn) {
+              mover = in[y][x];
 
-          //otherwise a message is output to user that the wrong
-          //color piece is being selected
-          } else {
-            System.out.println("It is not your turn.");
-          } //end if/else
+              //otherwise a message is output to user that the wrong
+              //color piece is being selected
+            } else {
+              System.out.println("It is not your turn.");
+            } //end if/else
+          }
 
           //resetting of position in the background 2D array to maintain
           //consistency in gameplay
@@ -267,6 +269,34 @@ public class Chess extends Application {
               turn = !turn;
             } //end if
 
+            //additional logic to allow castling
+            if (mover instanceof King && x == 6) {
+              King re = (King) mover;
+
+              //helper method from king class used to prevent unintentional
+              //movement of the rook
+              if (re.castle()) {
+                Piece assist;
+
+                //White side
+                if (mover.type()) {
+                  assist = (Rook) in[7][7];
+                  assist.setX(5);
+                  assist.setY(7);
+                  in[7][7] = null;
+                  in[7][5] = assist;
+
+                //black side
+                } else {
+                  assist = (Rook) in[0][7];
+                  assist.setX(5);
+                  assist.setY(0);
+                  in[0][7] = null;
+                  in[0][5] = assist;
+                } //end if/ else
+              } //end if
+            } //end if
+            
             //these statements will changeg the piece object
             //according to where it was moved on the board
             mover.setX(x);
