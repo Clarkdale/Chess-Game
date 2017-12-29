@@ -37,7 +37,7 @@ public class Chess extends Application {
   @Override
   public void start(Stage window) {
     window.setTitle("Chess");
-    window.getIcons().add(new Image("BlackKnight.png"));
+    window.getIcons().add(new Image("WhiteKnight.png"));
     //overall borderpain created
     BorderPane rootPane = new BorderPane();
 
@@ -296,7 +296,7 @@ public class Chess extends Application {
                 } //end if/ else
               } //end if
             } //end if
-            
+
             //these statements will changeg the piece object
             //according to where it was moved on the board
             mover.setX(x);
