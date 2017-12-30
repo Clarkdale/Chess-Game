@@ -38,7 +38,7 @@ public class Pawn extends Piece {
     //boolean check for if the piece is white
     if (super.type()) {
       //Check to add common move of one space forward
-      if (in[currY - 1][currX] == null) {
+      if (currY > 0 && in[currY - 1][currX] == null) {
         possible.add(new Tuple(currX, currY - 1));
       } //end if
 
@@ -48,13 +48,13 @@ public class Pawn extends Piece {
       } //end if
 
       //checks for taking pieces in diagonal direction
-      if (currX != 0) {
+      if (currX != 0 && currY > 0) {
         if (in[currY - 1][currX - 1] != null && !in[currY - 1][currX - 1].type()) {
           possible.add(new Tuple(currX - 1, currY - 1));
         } //end if
       } //end if
 
-      if (currX != 7) {
+      if (currX != 7 && currY > 0) {
         if (in[currY - 1][currX + 1] != null && !in[currY - 1][currX + 1].type()) {
           possible.add(new Tuple(currX + 1, currY - 1));
         } //end if
@@ -62,7 +62,7 @@ public class Pawn extends Piece {
 
     //similar logic in opposite direction for black pieces
     } else {
-      if (in[currY + 1][currX] == null) {
+      if (currY < 7 && in[currY + 1][currX] == null) {
         possible.add(new Tuple(currX, currY + 1));
       } //end if
 
@@ -70,13 +70,13 @@ public class Pawn extends Piece {
         possible.add(new Tuple(currX, currY + 2));
       } //end if
 
-      if (currX != 0) {
+      if (currX != 0 && currY < 7) {
         if (in[currY + 1][currX - 1] != null && in[currY + 1][currX - 1].type()) {
           possible.add(new Tuple(currX - 1, currY + 1));
         } //end if
       } //end if
 
-      if (currX != 7) {
+      if (currX != 7 && currY < 7) {
         if (in[currY + 1][currX + 1] != null && in[currY + 1][currX + 1].type()) {
           possible.add(new Tuple(currX + 1, currY + 1));
         } //end if
