@@ -192,6 +192,8 @@ public class Chess extends Application {
     //starts with white moving first
     turn = true;
 
+    Computer test = new Computer(in);
+
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
@@ -309,6 +311,13 @@ public class Chess extends Application {
             mover = null;
 
             //move is made by the computer with the following statement
+
+            printBoard(in);
+            
+            if (!turn) {
+              test.makeMove();
+              turn = !turn;
+            }
 
             printBoard(in);
           } else {
