@@ -304,6 +304,10 @@ public class Chess extends Application {
             mover.setX(x);
             mover.setY(y);
 
+            if (in[y][x] != null) {
+              test.removePiece(in[y][x]);
+            }
+
             //board is adjusted after move to fully represent game
             in[y][x] = mover;
 
@@ -313,9 +317,9 @@ public class Chess extends Application {
             //move is made by the computer with the following statement
 
             printBoard(in);
-            
+
             if (!turn) {
-              test.makeMove();
+              test.randomMove();
               turn = !turn;
             }
 
