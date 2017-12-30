@@ -2,15 +2,20 @@ import java.util.*;
 
 public class Computer {
   Piece [][] board;
-  Set<Piece> pieces = new HashSet<>();
+  Set<Piece> pieces;
+  Set<Piece> others;
 
   public Computer(Piece [][] in) {
     board = in;
+    pieces = new HashSet<>();
+    others = new HashSet<>();
     for (Piece [] columns : board) {
       for (Piece pos : columns) {
         if (pos != null) {
           if (!pos.type()) {
             pieces.add(pos);
+          } else {
+            others.add(pos);
           }
         }
       }
@@ -51,64 +56,56 @@ public class Computer {
   }
 
   public void makeMove() {
-    HashMap<Piece, Set<Tuple>> possible = new HashMap<>();
-    for (Piece side : pieces) {
-      possible.put(side, side.move(board));
-    }
-
+    int max = -9999;
     Piece picked = null;
+    Tuple location = null;
 
-    Tuple bestMove = null;
-
-    int bestVal = -1;
-
-    for (Piece keys : possible.keySet()) {
-      for (Tuple rank : possible.get(keys)) {
-        int evaluation = checkSquare(rank);
-        if (evaluation > bestVal) {
-          picked = keys;
-          bestMove = rank;
-          bestVal = evaluation;
+    for (Piece own : pieces) {
+      HashSet<Tuple> possible = own.move(board);
+      for (Tuple attack : possible) {
+        int compare = minimax(board, false, 0, 2, own, possible);
+        if (compare > max) {
+          max = compare;
+          picked = own;
+          location = attack;
         }
       }
     }
 
-    if (bestVal < 0) {
-      randomMove();
-      System.out.println("Moved.");
-    } else {
-      int x = picked.getColumn();
-      int y = picked.getRow();
-      picked.setX(bestMove.getFirst());
-      picked.setY(bestMove.getSecond());
-      board[y][x] = null;
-      board[picked.getRow()][picked.getColumn()] = picked;
-      System.out.println("Moved.");
-    }
+    int x = picked.getColumn();
+    int y = picked.getRow();
+
+    in[y][x] = null;
+
+    picked.setX(location.getFirst());
+    picked.setY(location.getSecond());
+
+    in[location.getSecond()][location.getFirst()] = picked;
+  }
+
+  public int minimax(Piece [][] read, boolean side, int depth, int maxDepth, Piece hand, Tuple toMove) {
+
   }
 
   public int checkSquare(Tuple in) {
     if (board[in.getSecond()][in.getFirst()] != null) {
       Piece holder = board[in.getSecond()][in.getFirst()];
-      boolean other = holder.type();
-      if (other) {
-        if (holder instanceof Pawn) {
-          return 10;
-        } else if (holder instanceof Knight) {
-          return 30;
-        } else if (holder instanceof Bishop) {
-          return 30;
-        } else if (holder instanceof Rook) {
-          return 50;
-        } else if (holder instanceof Queen) {
-          return 90;
-        } else if (holder instanceof King) {
-          return 1;
-        }
+      if (holder instanceof Pawn) {
+        return 10;
+      } else if (holder instanceof Knight) {
+        return 30;
+      } else if (holder instanceof Bishop) {
+        return 30;
+      } else if (holder instanceof Rook) {
+        return 50;
+      } else if (holder instanceof Queen) {
+        return 90;
+      } else if (holder instanceof King) {
+        return 500;
       }
     }
 
-    return -1;
+    return 0;
   }
 
   public void removePiece(Piece in) {
