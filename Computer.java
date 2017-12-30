@@ -61,9 +61,11 @@ public class Computer {
     Tuple location = null;
 
     for (Piece own : pieces) {
-      HashSet<Tuple> possible = own.move(board);
+      Set<Tuple> possible = own.move(board);
+      Tuple toRemove = new Tuple(own.getColumn(), own.getRow());
+      possible.remove(toRemove);
       for (Tuple attack : possible) {
-        int compare = minimax(board, false, 0, 2, own, possible);
+        int compare = minimax(board, false, 0, 2, own, attack);
         if (compare > max) {
           max = compare;
           picked = own;
@@ -75,21 +77,75 @@ public class Computer {
     int x = picked.getColumn();
     int y = picked.getRow();
 
-    in[y][x] = null;
+    board[y][x] = null;
 
     picked.setX(location.getFirst());
     picked.setY(location.getSecond());
 
-    in[location.getSecond()][location.getFirst()] = picked;
+    board[location.getSecond()][location.getFirst()] = picked;
   }
 
   public int minimax(Piece [][] read, boolean side, int depth, int maxDepth, Piece hand, Tuple toMove) {
+    int currMax = 1;
 
-  }
+    Piece [][] copy = read.clone();
 
-  public int checkSquare(Tuple in) {
-    if (board[in.getSecond()][in.getFirst()] != null) {
-      Piece holder = board[in.getSecond()][in.getFirst()];
+    if (depth == maxDepth) {
+      int instance = -9999;
+      Set<Tuple> observe = hand.move(copy);
+      Tuple toRemove = new Tuple(hand.getColumn(), hand.getRow());
+      observe.remove(toRemove);
+
+      for (Tuple move : observe) {
+        int squareValue = checkSquare(move, copy);
+
+        if (squareValue > instance) {
+          instance = squareValue;
+        }
+      }
+
+      return instance;
+    }
+
+    Piece clone = copy[hand.getRow()][hand.getColumn()];
+
+    clone.setX(toMove.getFirst());
+    clone.setY(toMove.getSecond());
+
+    copy[toMove.getSecond()][toMove.getFirst()] = clone;
+
+    int kick;
+
+    if (side) {
+      for (Piece again : others) {
+        Set<Tuple> observe = again.move(copy);
+        Tuple toRemove = new Tuple(again.getColumn(), again.getRow());
+        observe.remove(toRemove);
+        for (Tuple possible : observe) {
+           kick = minimax(copy, !side, depth, maxDepth, again, possible);
+           currMax *= kick;
+           currMax *= -1;
+         }
+       }
+
+     } else {
+       for (Piece again : pieces) {
+         Set<Tuple> observe = again.move(copy);
+         Tuple toRemove = new Tuple(again.getColumn(), again.getRow());
+         observe.remove(toRemove);
+         for (Tuple possible : observe) {
+           kick = minimax(copy, !side, depth++, maxDepth, again, possible);
+           currMax *= kick;
+         }
+       }
+     }
+
+     return currMax;
+   }
+
+  public int checkSquare(Tuple in, Piece [][] game) {
+    if (game[in.getSecond()][in.getFirst()] != null) {
+      Piece holder = game[in.getSecond()][in.getFirst()];
       if (holder instanceof Pawn) {
         return 10;
       } else if (holder instanceof Knight) {
