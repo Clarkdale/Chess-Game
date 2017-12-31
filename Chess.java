@@ -317,13 +317,6 @@ public class Chess extends Application {
             //move is made by the computer with the following statement
 
             printBoard(in);
-
-            if (!turn) {
-              test.randomMove();
-              turn = !turn;
-            }
-
-            printBoard(in);
           } else {
             System.out.println("Invalid move.");
           } //end if/else
