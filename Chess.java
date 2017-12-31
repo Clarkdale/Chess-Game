@@ -43,10 +43,10 @@ public class Chess extends Application {
 
     //Interactive window is made, which will later have a listener for clicking
     //on screen
-    screen = new Canvas(800, 800);
+    screen = new Canvas(640, 640);
 
     //Scene made to later use as a means of setting the scene of GUI
-    Scene display = new Scene(rootPane, 800, 800);
+    Scene display = new Scene(rootPane, 640, 640);
 
     rootPane.getChildren().add(screen);
 
@@ -143,10 +143,10 @@ public class Chess extends Application {
           //graphics context prepared and used to draw a 100 by 100 pixel
           //square as a means of reference for each position on the board
           out.setFill(Color.BURLYWOOD);
-          out.fillRect(j * 100, i * 100, 100, 100);
+          out.fillRect(j * 80, i * 80, 80, 80);
           //same process with a different color for alternating color scheme
           out.setFill(Color.SADDLEBROWN);
-          out.fillRect((j + 1) * 100, i * 100, 100, 100);
+          out.fillRect((j + 1) * 80, i * 80, 80, 80);
         } //end for
         //case of odd numbered row indicies
       } else {
@@ -154,10 +154,10 @@ public class Chess extends Application {
         for (int j = 1; j < 8; j += 2) {
           //same process as above
           out.setFill(Color.BURLYWOOD);
-          out.fillRect(j * 100, i * 100, 100, 100);
+          out.fillRect(j * 80, i * 80, 80, 80);
 
           out.setFill(Color.SADDLEBROWN);
-          out.fillRect((j - 1) * 100, i * 100, 100, 100);
+          out.fillRect((j - 1) * 80, i * 80, 80, 80);
         } //end for
       } //end if/ else
     } //end for
@@ -168,7 +168,7 @@ public class Chess extends Application {
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
         if (in[i][j] != null) {
-          out.drawImage(in[i][j].graphic(), j * 100, i * 100, 100, 100);
+          out.drawImage(in[i][j].graphic(), j * 80, i * 80, 80, 80);
         } //end if
       } //end for
     } //end for
@@ -209,8 +209,8 @@ public class Chess extends Application {
         //as the board size is 800 by 800, with an 8x8 grid on top of this,
         //so each position will 100 pixels difference from on another,
         //allowing for this pixel value / 100 invariant to be true.
-        int x = (int) event.getX() / 100;
-        int y = (int) event.getY() / 100;
+        int x = (int) event.getX() / 80;
+        int y = (int) event.getY() / 80;
         //this boolean catches if the user has not selected a piece yet,
         //upon which the mover variable is reset, and the board is drawing
         //over to remove where the piecec was.
@@ -241,17 +241,17 @@ public class Chess extends Application {
               //the position of the original piece is highlighted
               //with this space
               if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
-                out.setFill(Color.rgb(100, 100, 100, 0.75));
-                out.fillRect(space.getFirst() * 100, space.getSecond() * 100, 100, 100);
-                out.drawImage(mover.graphic(), mover.getColumn() * 100, mover.getRow() * 100, 100, 100);
+                out.setFill(Color.rgb(80, 80, 80, 0.75));
+                out.fillRect(space.getFirst() * 80, space.getSecond() * 80, 80, 80);
+                out.drawImage(mover.graphic(), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
 
               //all other possible moves are highlighted using
               //sea foam green circles
               } else {
                 out.setFill(Color.AQUAMARINE);
                 out.setStroke(Color.WHITE);
-                out.fillOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
-                out.strokeOval(space.getFirst() * 100 + 25, space.getSecond() * 100 + 25, 50, 50);
+                out.fillOval(space.getFirst() * 80 + 20, space.getSecond() * 80 + 20, 40, 40);
+                out.strokeOval(space.getFirst() * 80 + 20, space.getSecond() * 80 + 20, 40, 40);
               } //end if/else
             } //end for
           } //end if
