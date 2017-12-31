@@ -43,7 +43,7 @@ public class Pawn extends Piece {
       } //end if
 
       //check for moving pawn two spaces forward
-      if (moved <= 1 && in[currY - 2][currX] == null && in[currY - 1][currX] == null) {
+      if (moved <= 1 && currY > 1 && in[currY - 2][currX] == null && in[currY - 1][currX] == null) {
         possible.add(new Tuple(currX, currY - 2));
       } //end if
 
@@ -66,7 +66,7 @@ public class Pawn extends Piece {
         possible.add(new Tuple(currX, currY + 1));
       } //end if
 
-      if (moved <= 1 && in[currY + 2][currX] == null && in[currY + 1][currX] == null) {
+      if (moved <= 1 && currY < 6 && in[currY + 2][currX] == null && in[currY + 1][currX] == null) {
         possible.add(new Tuple(currX, currY + 2));
       } //end if
 

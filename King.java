@@ -139,10 +139,8 @@ public class King extends Piece {
       } //end if
     } //end if
 
-    if (moved == 0) {
-      if (super.type() && in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
-        out.add(new Tuple(currX + 2, currY));
-      } else if (!super.type() && in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
+    if ((currY == 7 || currY == 0) && currX == 4) {
+      if (in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
         out.add(new Tuple(currX + 2, currY));
       }
     }

@@ -55,13 +55,53 @@ public class Computer {
     board[chosen.getRow()][chosen.getColumn()] = chosen;
   }
 
+  public Piece [][] deepCopy(Piece [][] in) {
+    Piece [][] out = new Piece [8][8];
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        Piece square = in[i][j];
+        if (square != null) {
+          if (square instanceof Pawn) {
+            out[i][j] = new Pawn(j, i, square.type());
+          } else if (square instanceof Rook) {
+            out[i][j] = new Rook(j, i, square.type());
+          } else if (square instanceof Knight) {
+            out[i][j] = new Knight(j, i, square.type());
+          } else if (square instanceof Bishop) {
+            out[i][j] = new Bishop(j, i, square.type());
+          } else if (square instanceof Queen) {
+            out[i][j] = new Queen(j, i, square.type());
+          } else if (square instanceof King) {
+            out[i][j] = new King(j, i, square.type());
+          } else {
+            out[i][j] = null;
+          }
+        }
+      }
+    }
+
+    return out;
+  }
+
   public void makeMove() {
-    int max = -9999;
+    int max = 0;
     Piece picked = null;
     Tuple location = null;
 
-    for (Piece check : pieces) {
-      Piece [][] outsideCopy = board.clone();
+    Piece [][] outsideCopy = deepCopy(board);
+
+    Set<Piece> blacks = new HashSet<>();
+
+    for (Piece [] row : outsideCopy) {
+      for (Piece potential : row) {
+        if (potential != null && !potential.type()) {
+          blacks.add(potential);
+        }
+      }
+    }
+
+    for (Piece check : blacks) {
+
       Set<Tuple> moves = check.move(outsideCopy);
 
       for (Tuple mind : moves) {
@@ -70,13 +110,15 @@ public class Computer {
 
         outsideCopy[y][x] = null;
 
+        check.setX(mind.getFirst());
+        check.setY(mind.getSecond());
         outsideCopy[mind.getSecond()][mind.getFirst()] = check;
 
-        int num = minimax(0, 2, outsideCopy, true);
+        int num = minimax(0, 0, outsideCopy, true);
 
-        if (num > max) {
+        if (num >= max) {
           max = num;
-          picked = check;
+          picked = board[y][x];
           location = mind;
         }
       }
@@ -91,13 +133,13 @@ public class Computer {
   public int minimax(int depth, int maxDepth, Piece [][] game, boolean turn) {
     int max = 0;
 
-    Piece [][] copy = game.clone();
+    Piece [][] copy = deepCopy(game);
 
 
     Set<Piece> whiteSide = new HashSet<>();
     Set<Piece> blackSide = new HashSet<>();
 
-    for (Piece [] rows : game) {
+    for (Piece [] rows : copy) {
       for (Piece individ : rows) {
         if (individ != null && individ.type()) {
           whiteSide.add(individ);
@@ -110,6 +152,8 @@ public class Computer {
     if (depth == maxDepth) {
       for (Piece last : blackSide) {
         Set<Tuple> moves = last.move(game);
+        Tuple toRemove = new Tuple(last.getColumn(), last.getRow());
+        moves.remove(toRemove);
         for (Tuple move : moves) {
           int checked = checkSquare(move, game);
           if (checked > max) {
@@ -127,7 +171,8 @@ public class Computer {
     if (turn) {
       for (Piece toMove : blackSide) {
         Set<Tuple> possible = toMove.move(game);
-
+        Tuple toRemove = new Tuple(toMove.getColumn(), toMove.getRow());
+        possible.remove(toRemove);
         for (Tuple slide : possible) {
           copy[toMove.getRow()][toMove.getColumn()] = null;
           toMove.setX(slide.getFirst());
@@ -139,12 +184,14 @@ public class Computer {
           }
         }
       }
+
       return max + secondMax;
 
     } else {
       for (Piece toMove : whiteSide) {
         Set<Tuple> possible = toMove.move(game);
-
+        Tuple toRemove = new Tuple(toMove.getColumn(), toMove.getRow());
+        possible.remove(toRemove);
         for (Tuple slide : possible) {
           copy[toMove.getRow()][toMove.getColumn()] = null;
           toMove.setX(slide.getFirst());
