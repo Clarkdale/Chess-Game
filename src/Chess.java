@@ -1,3 +1,8 @@
+/*====================================================================
+    Class Name:  Chess
+       Purpose:  Entry point for the game
+  Parent Class:  None
+====================================================================*/
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -38,7 +43,7 @@ public class Chess extends Application {
   @Override
   public void start(Stage window) {
     window.setTitle("Chess");
-    window.getIcons().add(new Image("WhiteKnight.png"));
+    window.getIcons().add(new Image("images/WhiteKnight.png"));
     //overall borderpain created
     BorderPane rootPane = new BorderPane();
 
