@@ -19,6 +19,7 @@ public class Chess extends Application {
   private GraphicsContext out;
   private Canvas screen;
   private boolean turn;
+  Piece [][] bobbyFisher;
 
   public static void main(String [] args) {
     launch(args);
@@ -46,9 +47,13 @@ public class Chess extends Application {
     screen = new Canvas(640, 640);
 
     //Scene made to later use as a means of setting the scene of GUI
-    Scene display = new Scene(rootPane, 640, 640);
+    Scene display = new Scene(rootPane, 840, 640);
 
-    rootPane.getChildren().add(screen);
+    rootPane.setLeft(screen);
+
+    AnchorPane pressMe = buttons();
+
+    rootPane.setRight(pressMe);
 
     out = screen.getGraphicsContext2D();
 
@@ -60,6 +65,28 @@ public class Chess extends Application {
     window.show();
   } //end method
 
+  public AnchorPane buttons() {
+    AnchorPane right = new AnchorPane();
+
+    Button reset = new Button("Reset Board");
+
+    ResetButton full = new ResetButton();
+
+    reset.setOnAction(full);
+    reset.setMinWidth(200);
+
+    right.getChildren().add(reset);
+
+    return right;
+  }
+
+  private class ResetButton implements EventHandler<ActionEvent> {
+    @Override
+    public void handle(ActionEvent event) {
+      chessMain();
+    }
+  }
+
   /*====================================================================
      Method Name:  chessMain
          Purpose:  A bit of a seperate main for the chess game. This main
@@ -70,7 +97,7 @@ public class Chess extends Application {
          Returns:  None
   ====================================================================*/
   public void chessMain() {
-    Piece [][] bobbyFisher = boardGen();
+    bobbyFisher = boardGen();
 
     printBoard(bobbyFisher);
     interact(bobbyFisher);
@@ -88,35 +115,36 @@ public class Chess extends Application {
       Parameters:  None
          Returns:  2D array representation of the playing barod
   ====================================================================*/
-  public static Piece [][] boardGen() {
+  public Piece [][] boardGen() {
     //2D array is used in background to keep track of pieces on board
     Piece [][] board = new Piece[8][8];
 
     //This side of the board is generagted to be black pieces
-    board[0][0] = new Rook(0, 0, false);
-    board[0][1] = new Knight(1, 0, false);
-    board[0][2] = new Bishop(2, 0, false);
-    board[0][3] = new Queen(3, 0, false);
-    board[0][4] = new King(4, 0, false);
-    board[0][5] = new Bishop(5, 0, false);
-    board[0][6] = new Knight(6, 0, false);
-    board[0][7] = new Rook(7, 0, false);
+      board[0][0] = new Rook(0, 0, false);
+      board[0][1] = new Knight(1, 0, false);
+      board[0][2] = new Bishop(2, 0, false);
+      board[0][3] = new Queen(3, 0, false);
+      board[0][4] = new King(4, 0, false);
+      board[0][5] = new Bishop(5, 0, false);
+      board[0][6] = new Knight(6, 0, false);
+      board[0][7] = new Rook(7, 0, false);
 
-    //side of the board for white pieces
-    board[7][0] = new Rook(0, 7, true);
-    board[7][1] = new Knight(1, 7, true);
-    board[7][2] = new Bishop(2, 7, true);
-    board[7][3] = new Queen(3, 7, true);
-    board[7][4] = new King(4, 7, true);
-    board[7][5] = new Bishop(5, 7, true);
-    board[7][6] = new Knight(6, 7, true);
-    board[7][7] = new Rook(7, 7, true);
+      //side of the board for white pieces
+      board[7][0] = new Rook(0, 7, true);
+      board[7][1] = new Knight(1, 7, true);
+      board[7][2] = new Bishop(2, 7, true);
+      board[7][3] = new Queen(3, 7, true);
+      board[7][4] = new King(4, 7, true);
+      board[7][5] = new Bishop(5, 7, true);
+      board[7][6] = new Knight(6, 7, true);
+      board[7][7] = new Rook(7, 7, true);
 
-    //Furthermore, generates pawns using a for loop to reduce redundancy
-    for (int i = 0; i < board.length; i++) {
-      board[1][i] = new Pawn(i, 1, false);
-      board[6][i] = new Pawn(i, 6, true);
-    } //end for
+      //Furthermore, generates pawns using a for loop to reduce redundancy
+      for (int i = 0; i < board.length; i++) {
+        board[1][i] = new Pawn(i, 1, false);
+        board[6][i] = new Pawn(i, 6, true);
+      } //end for
+
     return board;
   } //end method
 
