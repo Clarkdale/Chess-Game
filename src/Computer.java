@@ -100,7 +100,7 @@ public class Computer {
       Set<Tuple> possible = side.move(board);
 
       for (Tuple potential : possible) {
-        int score = minimax(0, 0, 0, board, true);
+        int score = minimax(0, 1, 0, board, true);
         if (score >= max) {
           picked = side;
           location = potential;
@@ -146,7 +146,7 @@ public class Computer {
           look.setX(move.getFirst());
           look.setY(move.getSecond());
           copy[move.getSecond()][move.getFirst()] = look;
-          caught = minimax(depth, maxDepth, rank, copy, !turn);
+          caught = minimax(depth++, maxDepth, rank, copy, !turn);
           if (caught > localMax) {
             localMax = caught;
           }
