@@ -88,46 +88,27 @@ public class Computer {
     Piece picked = null;
     Tuple location = null;
 
-    Piece [][] outsideCopy = deepCopy(board);
+    for (Piece side : pieces) {
+      Set<Tuple> possible = side.move(board);
 
-    Set<Piece> blacks = new HashSet<>();
-
-    for (Piece [] row : outsideCopy) {
-      for (Piece potential : row) {
-        if (potential != null && !potential.type()) {
-          blacks.add(potential);
+      for (Tuple potential : possible) {
+        int score = checkSquare(potential, board);
+        if (score > max) {
+          picked = side;
+          location = potential;
+          max = score;
         }
       }
     }
 
-    for (Piece check : blacks) {
-
-      Set<Tuple> moves = check.move(outsideCopy);
-
-      for (Tuple mind : moves) {
-        int x = check.getColumn();
-        int y = check.getRow();
-
-        outsideCopy[y][x] = null;
-
-        check.setX(mind.getFirst());
-        check.setY(mind.getSecond());
-        outsideCopy[mind.getSecond()][mind.getFirst()] = check;
-
-        int num = minimax(0, 0, outsideCopy, true);
-
-        if (num >= max) {
-          max = num;
-          picked = board[y][x];
-          location = mind;
-        }
-      }
+    if (max == 0) {
+      randomMove();
+    } else {
+      board[picked.getRow()][picked.getColumn()] = null;
+      picked.setX(location.getFirst());
+      picked.setY(location.getSecond());
+      board[location.getSecond()][location.getFirst()] = picked;
     }
-
-    board[picked.getRow()][picked.getColumn()] = null;
-    picked.setX(location.getFirst());
-    picked.setY(location.getSecond());
-    board[location.getSecond()][location.getFirst()] = picked;
   }
 
   public int minimax(int depth, int maxDepth, Piece [][] game, boolean turn) {
