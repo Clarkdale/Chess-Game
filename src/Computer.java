@@ -196,8 +196,8 @@ public class Computer {
 
 
   public int checkSquare(Tuple in, Piece [][] game) {
-    if (game[in.getSecond()][in.getFirst()] != null) {
-      Piece holder = game[in.getSecond()][in.getFirst()];
+    Piece holder = game[in.getSecond()][in.getFirst()];
+    if (holder != null && holder.type()) {
       if (holder instanceof Pawn) {
         return 10;
       } else if (holder instanceof Knight) {

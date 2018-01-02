@@ -24,7 +24,8 @@ public class Chess extends Application {
   private GraphicsContext out;
   private Canvas screen;
   private boolean turn;
-  Piece [][] bobbyFisher;
+  private Piece [][] bobbyFisher;
+  private Computer clark;
 
   public static void main(String [] args) {
     launch(args);
@@ -82,13 +83,33 @@ public class Chess extends Application {
 
     right.getChildren().add(reset);
 
+    Button computer = new Button("Play The Mind of Clark");
+
+    ComputerButton toClick = new ComputerButton();
+
+    computer.setOnAction(toClick);
+    computer.setMinWidth(200);
+
+    AnchorPane.setTopAnchor(computer, 30.0);
+
+    right.getChildren().add(computer);
+
     return right;
   }
 
   private class ResetButton implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
+      clark = null;
       chessMain();
+    }
+  }
+
+  private class ComputerButton implements EventHandler<ActionEvent> {
+    @Override
+    public void handle(ActionEvent event) {
+      System.out.println("Handled");
+      clark = new Computer(bobbyFisher);
     }
   }
 
@@ -225,8 +246,6 @@ public class Chess extends Application {
     //starts with white moving first
     turn = true;
 
-    Computer test = new Computer(in);
-
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
@@ -338,7 +357,7 @@ public class Chess extends Application {
             mover.setY(y);
 
             if (in[y][x] != null) {
-              test.removePiece(in[y][x]);
+              clark.removePiece(in[y][x]);
             }
 
             //board is adjusted after move to fully represent game
@@ -350,6 +369,12 @@ public class Chess extends Application {
             //move is made by the computer with the following statement
 
             printBoard(in);
+
+            if (clark != null && !turn) {
+              clark.makeMove();
+              turn = !turn;
+              printBoard(in);
+            }
           } else {
             System.out.println("Invalid move.");
           } //end if/else
