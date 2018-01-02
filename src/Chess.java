@@ -108,7 +108,6 @@ public class Chess extends Application {
   private class ComputerButton implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
-      System.out.println("Handled");
       clark = new Computer(bobbyFisher);
     }
   }
@@ -375,9 +374,7 @@ public class Chess extends Application {
               turn = !turn;
               printBoard(in);
             }
-          } else {
-            System.out.println("Invalid move.");
-          } //end if/else
+          }
         } //end if/else
       } //end internal method
     }); //end anonymous handler
