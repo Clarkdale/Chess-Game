@@ -96,10 +96,10 @@ public class Pawn extends Piece {
   public Image graphic() {
     if (super.type()) {
       //return (new Image("tim.jpg"));
-      return (new Image("WhitePawn.png"));
+      return (new Image("images/WhitePawn.png"));
     } else {
       //return (new Image("stephen.jpg"));
-      return (new Image("BlackPawn.png"));
+      return (new Image("images/BlackPawn.png"));
     } //end if/else
   } //end method
 

@@ -117,10 +117,10 @@ public class Rook extends Piece {
 
   public Image graphic() {
     if (super.type()) {
-      return (new Image("WhiteRook.png"));
+      return (new Image("images/WhiteRook.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/homer.jpg"));
     } else {
-      return (new Image("BlackRook.png"));
+      return (new Image("images/BlackRook.png"));
       //return (new Image("http://www.surdeanu.info/mihai/website/mihai/Surdeanu5-small.jpg"));
     } //end if/else
   } //end method
