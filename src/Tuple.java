@@ -4,7 +4,6 @@
                  locations on the chess board
   Parent Class:  None
 ====================================================================*/
-
 public class Tuple {
   private int first;
   private int second;

@@ -1,3 +1,8 @@
+/*====================================================================
+    Class Name:  Computer
+       Purpose:  AI for human vs computer
+  Parent Class:  None
+====================================================================*/
 import java.util.*;
 
 public class Computer {

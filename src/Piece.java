@@ -4,7 +4,6 @@
                  in a chess game
   Parent Class:  None
 ====================================================================*/
-
 import javafx.scene.image.Image;
 import java.util.*;
 

@@ -5,6 +5,7 @@
 ====================================================================*/
 import javafx.scene.image.Image;
 import java.util.*;
+
 public class King extends Piece {
   private boolean check;
   private int moved;
@@ -57,10 +58,10 @@ public class King extends Piece {
 
   public Image graphic() {
     if (super.type()) {
-      return (new Image("WhiteKing.png"));
+      return (new Image("images/WhiteKing.png"));
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
     } else {
-      return (new Image("BlackKing.png"));
+      return (new Image("images/BlackKing.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/debray.jpg"));
     } //end if/else
   } //end method
