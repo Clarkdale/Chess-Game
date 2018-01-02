@@ -14,17 +14,6 @@ public class Computer {
     board = in;
     pieces = new HashSet<>();
     others = new HashSet<>();
-    for (Piece [] columns : board) {
-      for (Piece pos : columns) {
-        if (pos != null) {
-          if (!pos.type()) {
-            pieces.add(pos);
-          } else {
-            others.add(pos);
-          }
-        }
-      }
-    }
   }
 
   public void randomMove() {
@@ -88,17 +77,31 @@ public class Computer {
     return out;
   }
 
+  public Set<Piece> getPieces(Piece [][] in, boolean type) {
+    Set<Piece> out = new HashSet<>();
+    for (Piece [] row : board) {
+      for (Piece hand : row) {
+        if (hand != null && hand.type() == type) {
+          out.add(hand);
+        }
+      }
+    }
+    return out;
+  }
+
   public void makeMove() {
     int max = 0;
     Piece picked = null;
     Tuple location = null;
 
+    pieces = getPieces(board, false);
+
     for (Piece side : pieces) {
       Set<Tuple> possible = side.move(board);
 
       for (Tuple potential : possible) {
-        int score = checkSquare(potential, board);
-        if (score > max) {
+        int score = minimax(0, 0, 0, board, true);
+        if (score >= max) {
           picked = side;
           location = potential;
           max = score;
@@ -106,91 +109,70 @@ public class Computer {
       }
     }
 
-    if (max == 0) {
-      randomMove();
-    } else {
-      board[picked.getRow()][picked.getColumn()] = null;
-      picked.setX(location.getFirst());
-      picked.setY(location.getSecond());
-      board[location.getSecond()][location.getFirst()] = picked;
-    }
+    board[picked.getRow()][picked.getColumn()] = null;
+    picked.setX(location.getFirst());
+    picked.setY(location.getSecond());
+    board[location.getSecond()][location.getFirst()] = picked;
   }
 
-  public int minimax(int depth, int maxDepth, Piece [][] game, boolean turn) {
-    int max = 0;
-
+  public int minimax(int depth, int maxDepth, int rank, Piece [][] game, boolean turn) {
     Piece [][] copy = deepCopy(game);
 
-
-    Set<Piece> whiteSide = new HashSet<>();
-    Set<Piece> blackSide = new HashSet<>();
-
-    for (Piece [] rows : copy) {
-      for (Piece individ : rows) {
-        if (individ != null && individ.type()) {
-          whiteSide.add(individ);
-        } else if (individ != null && !individ.type()) {
-          blackSide.add(individ);
-        }
-      }
-    }
+    Set<Piece> own = getPieces(copy, false);
+    Set<Piece> opponent = getPieces(copy, true);
 
     if (depth == maxDepth) {
-      for (Piece last : blackSide) {
-        Set<Tuple> moves = last.move(game);
-        Tuple toRemove = new Tuple(last.getColumn(), last.getRow());
-        moves.remove(toRemove);
-        for (Tuple move : moves) {
-          int checked = checkSquare(move, game);
-          if (checked > max) {
-            max = checked;
+      int max = 0;
+      for (Piece toMove : own) {
+        Set<Tuple> moveSet = toMove.move(copy);
+        for (Tuple move : moveSet) {
+          int squareValue = checkSquare(move, copy);
+          if (squareValue > max) {
+            max = squareValue;
           }
         }
       }
 
-      return max;
+      return rank + max;
     }
 
-    int caught;
-
-    int secondMax = 0;
     if (turn) {
-      for (Piece toMove : blackSide) {
-        Set<Tuple> possible = toMove.move(game);
-        Tuple toRemove = new Tuple(toMove.getColumn(), toMove.getRow());
-        possible.remove(toRemove);
-        for (Tuple slide : possible) {
-          copy[toMove.getRow()][toMove.getColumn()] = null;
-          toMove.setX(slide.getFirst());
-          toMove.setY(slide.getSecond());
-          copy[slide.getSecond()][slide.getFirst()] = toMove;
-          caught = minimax(depth, maxDepth, copy, !turn);
-          if (caught > secondMax) {
-            secondMax = caught;
+      int localMax = 0;
+      int caught;
+      for (Piece look : own) {
+        Set<Tuple> moveSet = look.move(copy);
+        for (Tuple move : moveSet) {
+          copy[look.getRow()][look.getColumn()] = null;
+          look.setX(move.getFirst());
+          look.setY(move.getSecond());
+          copy[move.getSecond()][move.getFirst()] = look;
+          caught = minimax(depth, maxDepth, rank, copy, !turn);
+          if (caught > localMax) {
+            localMax = caught;
           }
         }
       }
 
-      return max + secondMax;
+      return rank + localMax;
 
     } else {
-      for (Piece toMove : whiteSide) {
-        Set<Tuple> possible = toMove.move(game);
-        Tuple toRemove = new Tuple(toMove.getColumn(), toMove.getRow());
-        possible.remove(toRemove);
-        for (Tuple slide : possible) {
-          copy[toMove.getRow()][toMove.getColumn()] = null;
-          toMove.setX(slide.getFirst());
-          toMove.setY(slide.getSecond());
-          copy[slide.getSecond()][slide.getFirst()] = toMove;
-          caught = minimax(depth++, maxDepth, copy, !turn);
-          if (caught > secondMax) {
-            secondMax = caught;
+      int localMax = 0;
+      int caught;
+      for (Piece look : opponent) {
+        Set<Tuple> moveSet = look.move(copy);
+        for (Tuple move : moveSet) {
+          copy[look.getRow()][look.getColumn()] = null;
+          look.setX(move.getFirst());
+          look.setY(move.getSecond());
+          copy[move.getSecond()][move.getFirst()] = look;
+          caught = minimax(depth++, maxDepth, rank, copy, !turn);
+          if (caught > localMax) {
+            localMax = caught;
           }
         }
       }
 
-      return max - secondMax;
+      return rank - localMax;
     }
   }
 
@@ -214,6 +196,36 @@ public class Computer {
     }
 
     return 0;
+  }
+
+  public void dummyMove() {
+    int max = 0;
+    Piece picked = null;
+    Tuple location = null;
+
+    pieces = getPieces(board, false);
+
+    for (Piece side : pieces) {
+      Set<Tuple> possible = side.move(board);
+
+      for (Tuple potential : possible) {
+        int score = checkSquare(potential, board);
+        if (score > max) {
+          picked = side;
+          location = potential;
+          max = score;
+        }
+      }
+    }
+
+    if (max == 0) {
+      randomMove();
+    } else {
+      board[picked.getRow()][picked.getColumn()] = null;
+      picked.setX(location.getFirst());
+      picked.setY(location.getSecond());
+      board[location.getSecond()][location.getFirst()] = picked;
+    }
   }
 
   public void removePiece(Piece in) {
