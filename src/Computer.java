@@ -146,7 +146,7 @@ public class Computer {
           look.setX(move.getFirst());
           look.setY(move.getSecond());
           copy[move.getSecond()][move.getFirst()] = look;
-          caught = minimax(depth++, maxDepth, rank, copy, !turn);
+          caught = minimax(depth, maxDepth, rank, copy, !turn);
           if (caught > localMax) {
             localMax = caught;
           }
