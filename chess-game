@@ -1,6 +1,0 @@
-#!/bin/sh
-
-echo "Initializing..."
-javac src/*.java
-echo "Starting the game..."
-cd src && java Chess
