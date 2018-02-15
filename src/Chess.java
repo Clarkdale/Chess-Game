@@ -105,8 +105,8 @@ public class Chess extends Application {
   public void chessMain() {
     bobbyFisher = boardGen();
 
-    printBoard(bobbyFisher);
-    interact(bobbyFisher);
+    printBoard();
+    interact();
   } //end method
 
   /*====================================================================
@@ -165,7 +165,7 @@ public class Chess extends Application {
       Parameters:  in: 2D array representation of board
          Returns:  None
   ====================================================================*/
-  public void printBoard(Piece [][] in) {
+  public void printBoard() {
     //nested for loop to move across even indicies for alternating colors
     //scheme usually found on a chess board, as well as odd number indicies.
     //The starting variable in each for loop is modified based on whether or
@@ -201,8 +201,8 @@ public class Chess extends Application {
     //time complexity, but hey, still O(n^2) either way
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
-        if (in[i][j] != null) {
-          out.drawImage(in[i][j].graphic(), j * 80, i * 80, 80, 80);
+        if (bobbyFisher[i][j] != null) {
+          out.drawImage(bobbyFisher[i][j].graphic(), j * 80, i * 80, 80, 80);
         } //end if
       } //end for
     } //end for
@@ -221,7 +221,7 @@ public class Chess extends Application {
                    button at some point
          Returns:  None
   ====================================================================*/
-  public void interact(Piece [][] in) {
+  public void interact() {
     //the first turn is set to be true, to reflect that the game
     //starts with white moving first
     turn = true;
@@ -229,124 +229,127 @@ public class Chess extends Application {
     //an event handler is added to the graphics context, using an
     //anonymous class to avoid creating an external privatized classes
     //for this
-    screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-      //mover will be the piece the user clicks to move around screen
-      Piece mover = null;
-      Set<Tuple> potential = null;
+    screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new MoveHandler()); //end anonymous handler
+  } //end method
 
-      //actual method for using the mouse to move pieces around
-      @Override
-      public void handle(MouseEvent event) {
-        //x and y values will be the pixel value over a 100 in this case,
-        //as the board size is 800 by 800, with an 8x8 grid on top of this,
-        //so each position will 100 pixels difference from on another,
-        //allowing for this pixel value / 100 invariant to be true.
-        int x = (int) event.getX() / 80;
-        int y = (int) event.getY() / 80;
-        //this boolean catches if the user has not selected a piece yet,
-        //upon which the mover variable is reset, and the board is drawing
-        //over to remove where the piecec was.
-        if (mover == null) {
-          //this check will determine which player's turn it is
-          if (in[y][x] != null) {
-            if (in[y][x].type() == turn) {
-              mover = in[y][x];
+  private class MoveHandler implements EventHandler<MouseEvent> {
+    //mover will be the piece the user clicks to move around screen
+    Piece mover = null;
+    Set<Tuple> potential = null;
 
-              //otherwise a message is output to user that the wrong
-              //color piece is being selected
+    //actual method for using the mouse to move pieces around
+    @Override
+    public void handle(MouseEvent event) {
+      //x and y values will be the pixel value over a 100 in this case,
+      //as the board size is 800 by 800, with an 8x8 grid on top of this,
+      //so each position will 100 pixels difference from on another,
+      //allowing for this pixel value / 100 invariant to be true.
+      int x = (int) event.getX() / 80;
+      int y = (int) event.getY() / 80;
+      //this boolean catches if the user has not selected a piece yet,
+      //upon which the mover variable is reset, and the board is drawing
+      //over to remove where the piecec was.
+      if (mover == null) {
+        //this check will determine which player's turn it is
+        if (bobbyFisher[y][x] != null) {
+          if (bobbyFisher[y][x].type() == turn) {
+            mover = bobbyFisher[y][x];
+
+            //otherwise a message is output to user that the wrong
+            //color piece is being selected
+          } else {
+            System.out.println("It is not your turn.");
+          } //end if/else
+        }
+
+        //resetting of position in the background 2D array to maintain
+        //consistency in gameplay
+        if (mover != null) {
+          bobbyFisher[y][x] = null;
+
+          potential = mover.move(bobbyFisher);
+
+          //this for loop will parse over all the possible moves,
+          //and highlight where the player can move based on
+          //which piece was selected.
+          for (Tuple space : potential) {
+            //the position of the original piece is highlighted
+            //with this space
+            if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
+              out.setFill(Color.rgb(80, 80, 80, 0.75));
+              out.fillRect(space.getFirst() * 80, space.getSecond() * 80, 80, 80);
+              out.drawImage(mover.graphic(), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
+
+            //all other possible moves are highlighted using
+            //sea foam green circles
             } else {
-              System.out.println("It is not your turn.");
+              out.setFill(Color.AQUAMARINE);
+              out.setStroke(Color.WHITE);
+              out.fillOval(space.getFirst() * 80 + 20, space.getSecond() * 80 + 20, 40, 40);
+              out.strokeOval(space.getFirst() * 80 + 20, space.getSecond() * 80 + 20, 40, 40);
             } //end if/else
-          }
+          } //end for
+        } //end if
 
-          //resetting of position in the background 2D array to maintain
-          //consistency in gameplay
-          if (mover != null) {
-            in[y][x] = null;
+      //If the user already has a piece "in hand," or really stored to
+      //the mover here, then the process of moving the piece is followed
+      //within this else statement.
+      } else {
+        Tuple clicked = new Tuple(x, y);
 
-            potential = mover.move(in);
+        //if the user selects an appropriate space, the following
+        //is exectued
+        if (potential.contains(clicked)) {
 
-            //this for loop will parse over all the possible moves,
-            //and highlight where the player can move based on
-            //which piece was selected.
-            for (Tuple space : potential) {
-              //the position of the original piece is highlighted
-              //with this space
-              if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
-                out.setFill(Color.rgb(80, 80, 80, 0.75));
-                out.fillRect(space.getFirst() * 80, space.getSecond() * 80, 80, 80);
-                out.drawImage(mover.graphic(), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
-
-              //all other possible moves are highlighted using
-              //sea foam green circles
-              } else {
-                out.setFill(Color.AQUAMARINE);
-                out.setStroke(Color.WHITE);
-                out.fillOval(space.getFirst() * 80 + 20, space.getSecond() * 80 + 20, 40, 40);
-                out.strokeOval(space.getFirst() * 80 + 20, space.getSecond() * 80 + 20, 40, 40);
-              } //end if/else
-            } //end for
+          //logic to flip turn after a user inputs a move
+          if (mover.getColumn() != x || mover.getRow() != y) {
+            turn = !turn;
           } //end if
 
-        //If the user already has a piece "in hand," or really stored to
-        //the mover here, then the process of moving the piece is followed
-        //within this else statement.
-        } else {
-          Tuple clicked = new Tuple(x, y);
+          //additional logic to allow castling
+          if (mover instanceof King && x == 6) {
+            King re = (King) mover;
 
-          //if the user selects an appropriate space, the following
-          //is exectued
-          if (potential.contains(clicked)) {
+            //helper method from king class used to prevent unintentional
+            //movement of the rook
+            if (re.castle()) {
+              Piece assist;
 
-            //logic to flip turn after a user inputs a move
-            if (mover.getColumn() != x || mover.getRow() != y) {
-              turn = !turn;
+              //White side
+              if (mover.type()) {
+                assist = (Rook) bobbyFisher[7][7];
+                assist.setX(5);
+                assist.setY(7);
+                bobbyFisher[7][7] = null;
+                bobbyFisher[7][5] = assist;
+
+              //black side
+              } else {
+                assist = (Rook) bobbyFisher[0][7];
+                assist.setX(5);
+                assist.setY(0);
+                bobbyFisher[0][7] = null;
+                bobbyFisher[0][5] = assist;
+              } //end if/ else
             } //end if
+          } //end if
 
-            //additional logic to allow castling
-            if (mover instanceof King && x == 6) {
-              King re = (King) mover;
+          //these statements will changeg the piece object
+          //according to where it was moved on the board
+          mover.setX(x);
+          mover.setY(y);
 
-              //helper method from king class used to prevent unintentional
-              //movement of the rook
-              if (re.castle()) {
-                Piece assist;
+          //board is adjusted after move to fully represent game
+          bobbyFisher[y][x] = mover;
 
-                //White side
-                if (mover.type()) {
-                  assist = (Rook) in[7][7];
-                  assist.setX(5);
-                  assist.setY(7);
-                  in[7][7] = null;
-                  in[7][5] = assist;
-
-                //black side
-                } else {
-                  assist = (Rook) in[0][7];
-                  assist.setX(5);
-                  assist.setY(0);
-                  in[0][7] = null;
-                  in[0][5] = assist;
-                } //end if/ else
-              } //end if
-            } //end if
-
-            //these statements will changeg the piece object
-            //according to where it was moved on the board
-            mover.setX(x);
-            mover.setY(y);
-
-            //board is adjusted after move to fully represent game
-            in[y][x] = mover;
-
-            //mover is reset to null for next move
-            mover = null;
+          //mover is reset to null for next move
+          mover = null;
 
 
-            printBoard(in);
-          }
-        } //end if/else
-      } //end internal method
-    }); //end anonymous handler
-  } //end method
+          printBoard();
+        }
+      } //end if/else
+    } //end internal method
+  }
+
 } //end class
