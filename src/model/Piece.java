@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  Piece
        Purpose:  A parent class for all the pieces which will be used

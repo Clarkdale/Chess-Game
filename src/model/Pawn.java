@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  Pawn
        Purpose:  Instancec of Piece class to be used for pawn objects
@@ -8,7 +9,6 @@ import java.util.*;
 
 public class Pawn extends Piece {
   private int moved;
-  private Image pic;
 
   public Pawn(int k, int l, boolean color) {
     super(k, l, color);
@@ -96,10 +96,10 @@ public class Pawn extends Piece {
   public Image graphic() {
     if (super.type()) {
       //return (new Image("tim.jpg"));
-      return (new Image("images/WhitePawn.png"));
+      return (new Image("file:images/WhitePawn.png"));
     } else {
       //return (new Image("stephen.jpg"));
-      return (new Image("images/BlackPawn.png"));
+      return (new Image("file:images/BlackPawn.png"));
     } //end if/else
   } //end method
 

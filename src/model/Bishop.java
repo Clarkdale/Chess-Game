@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  Bishop
        Purpose:  Bishop instance of piece class
@@ -21,10 +22,10 @@ public class Bishop extends Piece {
 
   public Image graphic() {
     if (super.type()) {
-      return (new Image("images/WhiteBishop.png"));
+      return (new Image("file:images/WhiteBishop.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
     } else {
-      return (new Image("images/BlackBishop.png"));
+      return (new Image("file:images/BlackBishop.png"));
       //return (new Image("https://www.amrita.edu/site/ISSISP2016/images/ChristianCollberg.jpg"));
     } //end if/else
   } //end method

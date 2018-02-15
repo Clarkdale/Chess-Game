@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  Tuple
        Purpose:  Created to store immutable information about

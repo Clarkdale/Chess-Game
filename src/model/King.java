@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  King
        Purpose:  King instance of piece class
@@ -58,10 +59,10 @@ public class King extends Piece {
 
   public Image graphic() {
     if (super.type()) {
-      return (new Image("images/WhiteKing.png"));
+      return (new Image("file:images/WhiteKing.png"));
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
     } else {
-      return (new Image("images/BlackKing.png"));
+      return (new Image("file:images/BlackKing.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/debray.jpg"));
     } //end if/else
   } //end method

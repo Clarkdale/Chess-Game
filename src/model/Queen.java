@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  Queen
        Purpose:  Queen instance of Piece class... I'll admit it, I didn't
@@ -23,10 +24,10 @@ public class Queen extends Piece {
 
   public Image graphic() {
     if (super.type()) {
-      return (new Image("images/WhiteQueen.png"));
+      return (new Image("file:images/WhiteQueen.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/allison2.jpg"));
     } else {
-      return (new Image("images/BlackQueen.png"));
+      return (new Image("file:images/BlackQueen.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/obagy_0.jpg"));
     } //end if/else
   } //end method

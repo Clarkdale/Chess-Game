@@ -1,3 +1,4 @@
+package controller;
 /*====================================================================
     Class Name:  Chess
        Purpose:  Entry point for the game
@@ -7,24 +8,24 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.event.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.*;
-import java.io.*;
 import java.util.*;
+import model.*;
 
 public class Chess extends Application {
   private GraphicsContext out;
   private Canvas screen;
   private boolean turn;
   private Piece [][] bobbyFisher;
+  private MenuBar menuBar;
 
 
   public static void main(String [] args) {
@@ -44,7 +45,7 @@ public class Chess extends Application {
   @Override
   public void start(Stage window) {
     window.setTitle("Chess");
-    window.getIcons().add(new Image("images/WhiteKnight.png"));
+    window.getIcons().add(new Image("file:images/WhiteKnight.png"));
     //overall borderpain created
     BorderPane rootPane = new BorderPane();
 
@@ -53,13 +54,12 @@ public class Chess extends Application {
     screen = new Canvas(640, 640);
 
     //Scene made to later use as a means of setting the scene of GUI
-    Scene display = new Scene(rootPane, 840, 640);
+    Scene display = new Scene(rootPane, 640, 664);
+    
+    initMenu();
+    rootPane.setTop(menuBar);
 
     rootPane.setLeft(screen);
-
-    AnchorPane pressMe = buttons();
-
-    rootPane.setRight(pressMe);
 
     out = screen.getGraphicsContext2D();
 
@@ -70,27 +70,16 @@ public class Chess extends Application {
     window.setScene(display);
     window.show();
   } //end method
-
-  public AnchorPane buttons() {
-    AnchorPane right = new AnchorPane();
-
-    Button reset = new Button("Reset Board");
-
-    ResetButton full = new ResetButton();
-
-    reset.setOnAction(full);
-    reset.setMinWidth(200);
-
-    right.getChildren().add(reset);
-
-    return right;
-  }
-
-  private class ResetButton implements EventHandler<ActionEvent> {
-    @Override
-    public void handle(ActionEvent event) {
-      chessMain();
-    }
+  
+  public void initMenu() {
+	  menuBar = new MenuBar();
+	  Menu options = new Menu("Options");
+	  
+	  MenuItem newGame = new MenuItem("New Game");
+	  
+	  options.getItems().add(newGame);
+	  
+	  menuBar.getMenus().add(options);
   }
 
   /*====================================================================

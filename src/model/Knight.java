@@ -1,3 +1,4 @@
+package model;
 /*====================================================================
     Class Name:  Knight
        Purpose:  Knight instance of piece class
@@ -84,10 +85,10 @@ public class Knight extends Piece {
 
   public Image graphic() {
     if (super.type()) {
-      return (new Image("images/WhiteKnight.png"));
+      return (new Image("file:images/WhiteKnight.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/full_width_12_column/public/media/proebsting4_0.png"));
     } else {
-      return (new Image("images/BlackKnight.png"));
+      return (new Image("file:images/BlackKnight.png"));
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAIA_wDGAAAAAQAAAAAAAAqFAAAAJGM5YmU3MjU5LTJmOTItNGQzYS1iY2U5LTc4NjMxMTY2MmNkNg.jpg"));
     } //end if/else
   } //end method
