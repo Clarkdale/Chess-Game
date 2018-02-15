@@ -7,13 +7,9 @@ import java.util.*;
 
 public class Computer {
   Piece [][] board;
-  Set<Piece> pieces;
-  Set<Piece> others;
 
   public Computer(Piece [][] in) {
     board = in;
-    pieces = new HashSet<>();
-    others = new HashSet<>();
   }
 
   public void randomMove() {
@@ -100,7 +96,7 @@ public class Computer {
       Set<Tuple> possible = side.move(board);
 
       for (Tuple potential : possible) {
-        int score = minimax(0, 1, 0, board, true);
+        int score = minimax(0, 0, 0, board, true);
         if (score >= max) {
           picked = side;
           location = potential;
@@ -115,65 +111,21 @@ public class Computer {
     board[location.getSecond()][location.getFirst()] = picked;
   }
 
-  public int minimax(int depth, int maxDepth, int rank, Piece [][] game, boolean turn) {
-    Piece [][] copy = deepCopy(game);
+  public int minimax(int maxDepth) {
+    Piece [][] copy = deepCopy(board);
 
-    Set<Piece> own = getPieces(copy, false);
-    Set<Piece> opponent = getPieces(copy, true);
+    Set<Piece> own = getPieces(copy);
+    Set<Piece> opponent = getPieces(copy);
 
-    if (depth == maxDepth) {
-      int max = 0;
-      for (Piece toMove : own) {
-        Set<Tuple> moveSet = toMove.move(copy);
-        for (Tuple move : moveSet) {
-          int squareValue = checkSquare(move, copy);
-          if (squareValue > max) {
-            max = squareValue;
-          }
-        }
-      }
+    int out = -9999;
 
-      return rank + max;
+    int depth = 0;
+
+    while (depth < maxDepth) {
+
     }
 
-    if (turn) {
-      int localMax = 0;
-      int caught;
-      for (Piece look : own) {
-        Set<Tuple> moveSet = look.move(copy);
-        for (Tuple move : moveSet) {
-          copy[look.getRow()][look.getColumn()] = null;
-          look.setX(move.getFirst());
-          look.setY(move.getSecond());
-          copy[move.getSecond()][move.getFirst()] = look;
-          caught = minimax(depth, maxDepth, rank, copy, !turn);
-          if (caught > localMax) {
-            localMax = caught;
-          }
-        }
-      }
 
-      return rank + localMax;
-
-    } else {
-      int localMax = 0;
-      int caught;
-      for (Piece look : opponent) {
-        Set<Tuple> moveSet = look.move(copy);
-        for (Tuple move : moveSet) {
-          copy[look.getRow()][look.getColumn()] = null;
-          look.setX(move.getFirst());
-          look.setY(move.getSecond());
-          copy[move.getSecond()][move.getFirst()] = look;
-          caught = minimax(depth++, maxDepth, rank, copy, !turn);
-          if (caught > localMax) {
-            localMax = caught;
-          }
-        }
-      }
-
-      return rank - localMax;
-    }
   }
 
 

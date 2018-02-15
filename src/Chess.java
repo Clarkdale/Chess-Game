@@ -25,7 +25,7 @@ public class Chess extends Application {
   private Canvas screen;
   private boolean turn;
   private Piece [][] bobbyFisher;
-  private Computer clark;
+
 
   public static void main(String [] args) {
     launch(args);
@@ -83,32 +83,13 @@ public class Chess extends Application {
 
     right.getChildren().add(reset);
 
-    Button computer = new Button("Play The Mind of Clark");
-
-    ComputerButton toClick = new ComputerButton();
-
-    computer.setOnAction(toClick);
-    computer.setMinWidth(200);
-
-    AnchorPane.setTopAnchor(computer, 30.0);
-
-    right.getChildren().add(computer);
-
     return right;
   }
 
   private class ResetButton implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
-      clark = null;
       chessMain();
-    }
-  }
-
-  private class ComputerButton implements EventHandler<ActionEvent> {
-    @Override
-    public void handle(ActionEvent event) {
-      clark = new Computer(bobbyFisher);
     }
   }
 
@@ -355,25 +336,14 @@ public class Chess extends Application {
             mover.setX(x);
             mover.setY(y);
 
-            if (in[y][x] != null) {
-              clark.removePiece(in[y][x]);
-            }
-
             //board is adjusted after move to fully represent game
             in[y][x] = mover;
 
             //mover is reset to null for next move
             mover = null;
 
-            //move is made by the computer with the following statement
 
             printBoard(in);
-
-            if (clark != null && !turn) {
-              clark.makeMove();
-              turn = !turn;
-              printBoard(in);
-            }
           }
         } //end if/else
       } //end internal method
