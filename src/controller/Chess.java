@@ -77,9 +77,24 @@ public class Chess extends Application {
 	  
 	  MenuItem newGame = new MenuItem("New Game");
 	  
+	  MenuHandler modGame = new MenuHandler();
+	  
+	  newGame.setOnAction(modGame);
+	  
 	  options.getItems().add(newGame);
 	  
 	  menuBar.getMenus().add(options);
+  }
+  
+  private class MenuHandler implements EventHandler<ActionEvent> {
+	  @Override
+	  public void handle(ActionEvent e) {
+		  String text = ((MenuItem) e.getSource()).getText();
+		  
+		  if (text.equals("New Game")) {
+			  chessMain();
+		  }
+	  }
   }
 
   /*====================================================================
