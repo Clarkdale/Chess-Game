@@ -12,3 +12,4 @@ by selecting the options menu, and selecting the new game button.
 ![Example of move tracking](images/demonstration.png)
 
 This program is currently an Eclipse project. To run this, clone and create a workspace. 
+Chess piece icons courtesy of https://marcelk.net/chess/pieces/
