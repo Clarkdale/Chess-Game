@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 import java.util.*;
 
 public class Rook extends Piece {
-  public Rook(int i, int j, boolean type) {
-    super(i, j, type);
+  public Rook(int i, int j, boolean type, boolean ivory) {
+    super(i, j, type, ivory);
   } //end method
 
   public int getRow() {
@@ -117,7 +117,7 @@ public class Rook extends Piece {
   } //end method
 
   public Image graphic() {
-    if (super.type()) {
+    if (super.getIvory()) {
       return (new Image("file:images/WhiteRook.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/homer.jpg"));
     } else {

@@ -138,29 +138,29 @@ Parent Class:  Piece
     Piece [][] board = new Piece[8][8];
 
     //This side of the board is generagted to be black pieces
-      board[0][0] = new Rook(0, 0, false);
-      board[0][1] = new Knight(1, 0, false);
-      board[0][2] = new Bishop(2, 0, false);
-      board[0][3] = new Queen(3, 0, false);
-      board[0][4] = new King(4, 0, false);
-      board[0][5] = new Bishop(5, 0, false);
-      board[0][6] = new Knight(6, 0, false);
-      board[0][7] = new Rook(7, 0, false);
+      board[0][0] = new Rook(0, 0, false, true);
+      board[0][1] = new Knight(1, 0, false, true);
+      board[0][2] = new Bishop(2, 0, false, true);
+      board[0][3] = new Queen(3, 0, false, true);
+      board[0][4] = new King(4, 0, false, true);
+      board[0][5] = new Bishop(5, 0, false, true);
+      board[0][6] = new Knight(6, 0, false, true);
+      board[0][7] = new Rook(7, 0, false, true);
 
       //side of the board for white pieces
-      board[7][0] = new Rook(0, 7, true);
-      board[7][1] = new Knight(1, 7, true);
-      board[7][2] = new Bishop(2, 7, true);
-      board[7][3] = new Queen(3, 7, true);
-      board[7][4] = new King(4, 7, true);
-      board[7][5] = new Bishop(5, 7, true);
-      board[7][6] = new Knight(6, 7, true);
-      board[7][7] = new Rook(7, 7, true);
+      board[7][0] = new Rook(0, 7, true, false);
+      board[7][1] = new Knight(1, 7, true, false);
+      board[7][2] = new Bishop(2, 7, true, false);
+      board[7][3] = new Queen(3, 7, true, false);
+      board[7][4] = new King(4, 7, true, false);
+      board[7][5] = new Bishop(5, 7, true, false);
+      board[7][6] = new Knight(6, 7, true, false);
+      board[7][7] = new Rook(7, 7, true, false);
 
       //Furthermore, generates pawns using a for loop to reduce redundancy
       for (int i = 0; i < board.length; i++) {
-        board[1][i] = new Pawn(i, 1, false);
-        board[6][i] = new Pawn(i, 6, true);
+        board[1][i] = new Pawn(i, 1, false, true);
+        board[6][i] = new Pawn(i, 6, true, false);
       } //end for
 
     return board;
@@ -264,7 +264,7 @@ Parent Class:  Piece
       if (mover == null) {
         //this check will determine which player's turn it is
         if (bobbyFisher[y][x] != null) {
-          if (bobbyFisher[y][x].type() == turn) {
+          if (bobbyFisher[y][x].getIvory() == turn) {
             mover = bobbyFisher[y][x];
           }
         }

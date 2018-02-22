@@ -11,8 +11,8 @@ public class King extends Piece {
   private boolean check;
   private int moved;
 
-  public King(int i, int j, boolean type) {
-    super(i, j, type);
+  public King(int i, int j, boolean type, boolean ivory) {
+    super(i, j, type, ivory);
     check = false;
     moved = 0;
   } //end method
@@ -58,7 +58,7 @@ public class King extends Piece {
   }
 
   public Image graphic() {
-    if (super.type()) {
+    if (super.getIvory()) {
       return (new Image("file:images/WhiteKing.png"));
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
     } else {

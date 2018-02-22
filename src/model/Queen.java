@@ -10,8 +10,8 @@ import javafx.scene.image.Image;
 import java.util.*;
 
 public class Queen extends Piece {
-  public Queen(int i, int j, boolean type) {
-    super(i, j, type);
+  public Queen(int i, int j, boolean type, boolean ivory) {
+    super(i, j, type, ivory);
   } //end method
 
   public int getRow() {
@@ -23,7 +23,7 @@ public class Queen extends Piece {
   } //end method
 
   public Image graphic() {
-    if (super.type()) {
+    if (super.getIvory()) {
       return (new Image("file:images/WhiteQueen.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/allison2.jpg"));
     } else {
@@ -43,8 +43,8 @@ public class Queen extends Piece {
   public Set<Tuple> move(Piece [][] in) {
     //Rook and Bishop objects are created to handle adding moves to the moveset
     //for this piece
-    Rook rookRep = new Rook(super.getColumn(), super.getRow(), super.type());
-    Bishop bishopRep = new Bishop(super.getColumn(), super.getRow(), super.type());
+    Rook rookRep = new Rook(super.getColumn(), super.getRow(), super.type(), super.getIvory());
+    Bishop bishopRep = new Bishop(super.getColumn(), super.getRow(), super.type(), super.getIvory());
 
     //Sets for piece representations extracted into variablesto add to an overall
     //output set

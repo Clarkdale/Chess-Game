@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 import java.util.*;
 
 public class Bishop extends Piece {
-  public Bishop(int i, int j, boolean type) {
-    super(i, j, type);
+  public Bishop(int i, int j, boolean type, boolean ivory) {
+    super(i, j, type, ivory);
   } //end method
 
   public int getRow() {
@@ -21,7 +21,7 @@ public class Bishop extends Piece {
   } //end method
 
   public Image graphic() {
-    if (super.type()) {
+    if (super.getIvory()) {
       return (new Image("file:images/WhiteBishop.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
     } else {

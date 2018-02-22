@@ -10,8 +10,8 @@ import java.util.*;
 public class Pawn extends Piece {
   private int moved;
 
-  public Pawn(int k, int l, boolean color) {
-    super(k, l, color);
+  public Pawn(int k, int l, boolean color, boolean ivory) {
+    super(k, l, color, ivory);
     moved = 1;
   } //end method
 
@@ -94,7 +94,7 @@ public class Pawn extends Piece {
          Returns:  Image to be displayed on GUI
   ====================================================================*/
   public Image graphic() {
-    if (super.type()) {
+    if (super.getIvory()) {
       //return (new Image("tim.jpg"));
       return (new Image("file:images/WhitePawn.png"));
     } else {

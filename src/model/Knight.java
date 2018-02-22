@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 import java.util.*;
 
 public class Knight extends Piece {
-  public Knight(int k, int l, boolean color) {
-    super(k, l, color);
+  public Knight(int k, int l, boolean color, boolean ivory) {
+    super(k, l, color, ivory);
   } //end method
 
   public int getRow() {
@@ -84,7 +84,7 @@ public class Knight extends Piece {
   } //end method
 
   public Image graphic() {
-    if (super.type()) {
+    if (super.getIvory()) {
       return (new Image("file:images/WhiteKnight.png"));
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/full_width_12_column/public/media/proebsting4_0.png"));
     } else {
