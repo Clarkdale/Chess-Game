@@ -115,7 +115,8 @@ Parent Class:  Piece
          Returns:  None
   ====================================================================*/
   public void chessMain() {
-    bobbyFisher = boardGen();
+	 
+    bobbyFisher = boardGenBlack();
 
     printBoard();
     interact();
@@ -133,38 +134,85 @@ Parent Class:  Piece
       Parameters:  None
          Returns:  2D array representation of the playing barod
   ====================================================================*/
-  public Piece [][] boardGen() {
+  public Piece [][] boardGenWhite() {
     //2D array is used in background to keep track of pieces on board
     Piece [][] board = new Piece[8][8];
 
     //This side of the board is generagted to be black pieces
-      board[0][0] = new Rook(0, 0, false, true);
-      board[0][1] = new Knight(1, 0, false, true);
-      board[0][2] = new Bishop(2, 0, false, true);
-      board[0][3] = new Queen(3, 0, false, true);
-      board[0][4] = new King(4, 0, false, true);
-      board[0][5] = new Bishop(5, 0, false, true);
-      board[0][6] = new Knight(6, 0, false, true);
-      board[0][7] = new Rook(7, 0, false, true);
+      board[0][0] = new Rook(0, 0, false, false);
+      board[0][1] = new Knight(1, 0, false, false);
+      board[0][2] = new Bishop(2, 0, false, false);
+      board[0][3] = new Queen(3, 0, false, false);
+      board[0][4] = new King(4, 0, false, false);
+      board[0][5] = new Bishop(5, 0, false, false);
+      board[0][6] = new Knight(6, 0, false, false);
+      board[0][7] = new Rook(7, 0, false, false);
 
       //side of the board for white pieces
-      board[7][0] = new Rook(0, 7, true, false);
-      board[7][1] = new Knight(1, 7, true, false);
-      board[7][2] = new Bishop(2, 7, true, false);
-      board[7][3] = new Queen(3, 7, true, false);
-      board[7][4] = new King(4, 7, true, false);
-      board[7][5] = new Bishop(5, 7, true, false);
-      board[7][6] = new Knight(6, 7, true, false);
-      board[7][7] = new Rook(7, 7, true, false);
+      board[7][0] = new Rook(0, 7, true, true);
+      board[7][1] = new Knight(1, 7, true, true);
+      board[7][2] = new Bishop(2, 7, true, true);
+      board[7][3] = new Queen(3, 7, true, true);
+      board[7][4] = new King(4, 7, true, true);
+      board[7][5] = new Bishop(5, 7, true, true);
+      board[7][6] = new Knight(6, 7, true, true);
+      board[7][7] = new Rook(7, 7, true, true);
 
       //Furthermore, generates pawns using a for loop to reduce redundancy
       for (int i = 0; i < board.length; i++) {
-        board[1][i] = new Pawn(i, 1, false, true);
-        board[6][i] = new Pawn(i, 6, true, false);
+        board[1][i] = new Pawn(i, 1, false, false);
+        board[6][i] = new Pawn(i, 6, true, true);
       } //end for
 
     return board;
   } //end method
+  
+  /*====================================================================
+  Method Name:  boardGen
+      Purpose:  This method generates the 2D array representation of
+                the playing board, which will include the different kinds
+                of pieces associated in each appropriate position.
+                The 2D list is then returned to be used in other methods.
+                Recall that a chess board is classically an 8 by 8 square
+                board, which is represented in the length of the outer,
+                and interior lists
+   Parameters:  None
+      Returns:  2D array representation of the playing barod
+====================================================================*/
+public Piece [][] boardGenBlack() {
+ //2D array is used in background to keep track of pieces on board
+ Piece [][] board = new Piece[8][8];
+
+ //This side of the board is generagted to be black pieces
+   board[0][0] = new Rook(0, 0, false, true);
+   board[0][1] = new Knight(1, 0, false, true);
+   board[0][2] = new Bishop(2, 0, false, true);
+   board[0][3] = new Queen(3, 0, false, true);
+   board[0][4] = new King(4, 0, false, true);
+   board[0][5] = new Bishop(5, 0, false, true);
+   board[0][6] = new Knight(6, 0, false, true);
+   board[0][7] = new Rook(7, 0, false, true);
+
+   //side of the board for white pieces
+   board[7][0] = new Rook(0, 7, true, false);
+   board[7][1] = new Knight(1, 7, true, false);
+   board[7][2] = new Bishop(2, 7, true, false);
+   board[7][3] = new Queen(3, 7, true, false);
+   board[7][4] = new King(4, 7, true, false);
+   board[7][5] = new Bishop(5, 7, true, false);
+   board[7][6] = new Knight(6, 7, true, false);
+   board[7][7] = new Rook(7, 7, true, false);
+
+   //Furthermore, generates pawns using a for loop to reduce redundancy
+   for (int i = 0; i < board.length; i++) {
+     board[1][i] = new Pawn(i, 1, false, true);
+     board[6][i] = new Pawn(i, 6, true, false);
+   } //end for
+
+ return board;
+} //end method
+  
+  
 
   /*====================================================================
      Method Name:  printBoard
