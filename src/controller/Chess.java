@@ -3,6 +3,7 @@ package controller;
     Class Name:  Chess
        Purpose:  Entry point for the game
   Parent Class:  None
+	   @author:  Clark D Penado
 ====================================================================*/
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -86,12 +87,19 @@ public class Chess extends Application {
 	  menuBar.getMenus().add(options);
   }
   
+  /*====================================================================
+  Class Name:  MenuHandler
+     Purpose:  Allows menu items to be clickable, and provide releative
+               updates to the game that is at hand
+Parent Class:  Piece
+====================================================================*/
   private class MenuHandler implements EventHandler<ActionEvent> {
 	  @Override
 	  public void handle(ActionEvent e) {
 		  String text = ((MenuItem) e.getSource()).getText();
 		  
 		  if (text.equals("New Game")) {
+			  turn = true;
 			  chessMain();
 		  }
 	  }
@@ -258,12 +266,7 @@ public class Chess extends Application {
         if (bobbyFisher[y][x] != null) {
           if (bobbyFisher[y][x].type() == turn) {
             mover = bobbyFisher[y][x];
-
-            //otherwise a message is output to user that the wrong
-            //color piece is being selected
-          } else {
-            System.out.println("It is not your turn.");
-          } //end if/else
+          }
         }
 
         //resetting of position in the background 2D array to maintain
@@ -354,6 +357,6 @@ public class Chess extends Application {
         }
       } //end if/else
     } //end internal method
-  }
+  } //end class
 
 } //end class
