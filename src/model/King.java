@@ -4,11 +4,15 @@ package model;
        Purpose:  King instance of piece class
   Parent Class:  Piece
 ====================================================================*/
-import javafx.scene.image.Image;
+
 import java.util.*;
 
 public class King extends Piece {
-  private boolean check;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private boolean check;
   private int moved;
 
   public King(int i, int j, boolean type, boolean ivory) {
@@ -57,12 +61,12 @@ public class King extends Piece {
     return moved == 0;
   }
 
-  public Image graphic() {
+  public String graphic() {
     if (super.getIvory()) {
-      return (new Image("file:images/WhiteKing.png"));
+      return ("file:images/WhiteKing.png");
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
     } else {
-      return (new Image("file:images/BlackKing.png"));
+      return ("file:images/BlackKing.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/debray.jpg"));
     } //end if/else
   } //end method

@@ -4,11 +4,16 @@ package model;
        Purpose:  Bishop instance of piece class
   Parent Class:  Piece
 ====================================================================*/
-import javafx.scene.image.Image;
+
 import java.util.*;
 
 public class Bishop extends Piece {
-  public Bishop(int i, int j, boolean type, boolean ivory) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public Bishop(int i, int j, boolean type, boolean ivory) {
     super(i, j, type, ivory);
   } //end method
 
@@ -20,12 +25,12 @@ public class Bishop extends Piece {
     return super.getColumn();
   } //end method
 
-  public Image graphic() {
+  public String graphic() {
     if (super.getIvory()) {
-      return (new Image("file:images/WhiteBishop.png"));
+      return ("file:images/WhiteBishop.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
     } else {
-      return (new Image("file:images/BlackBishop.png"));
+      return ("file:images/BlackBishop.png");
       //return (new Image("https://www.amrita.edu/site/ISSISP2016/images/ChristianCollberg.jpg"));
     } //end if/else
   } //end method

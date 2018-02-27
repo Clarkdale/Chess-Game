@@ -6,18 +6,21 @@ package controller;
 	   @author:  Clark D Penado
 ====================================================================*/
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.event.*;
 import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.*;
 import model.*;
 
@@ -26,7 +29,9 @@ public class Chess extends Application {
   private Canvas screen;
   private boolean turn;
   private Piece [][] bobbyFisher;
-  private MenuBar menuBar;
+  private ObjectOutputStream outputToServer;
+  private ObjectInputStream inputFromServer;
+  private Socket socket;
 
 
   public static void main(String [] args) {
@@ -55,16 +60,16 @@ public class Chess extends Application {
     screen = new Canvas(640, 640);
 
     //Scene made to later use as a means of setting the scene of GUI
-    Scene display = new Scene(rootPane, 640, 664);
+    Scene display = new Scene(rootPane, 640, 640);
     
-    initMenu();
-    rootPane.setTop(menuBar);
 
     rootPane.setLeft(screen);
 
     out = screen.getGraphicsContext2D();
-
-    chessMain();
+    
+    openConnection();
+    
+    screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new MoveHandler());
 
     //Scene is added, and the contents of this scene are displayed ot the GUI
     //using these methods.
@@ -72,147 +77,47 @@ public class Chess extends Application {
     window.show();
   } //end method
   
-  public void initMenu() {
-	  menuBar = new MenuBar();
-	  Menu options = new Menu("Options");
+  @SuppressWarnings("unchecked")
+  private void openConnection() {
 	  
-	  MenuItem newGame = new MenuItem("New Game");
-	  
-	  MenuHandler modGame = new MenuHandler();
-	  
-	  newGame.setOnAction(modGame);
-	  
-	  options.getItems().add(newGame);
-	  
-	  menuBar.getMenus().add(options);
-  }
-  
-  /*====================================================================
-  Class Name:  MenuHandler
-     Purpose:  Allows menu items to be clickable, and provide releative
-               updates to the game that is at hand
-Parent Class:  Piece
-====================================================================*/
-  private class MenuHandler implements EventHandler<ActionEvent> {
-	  @Override
-	  public void handle(ActionEvent e) {
-		  String text = ((MenuItem) e.getSource()).getText();
+	  try {
+		  socket = new Socket("localhost", 4000);
 		  
-		  if (text.equals("New Game")) {
-			  turn = true;
-			  chessMain();
-		  }
+		  outputToServer = new ObjectOutputStream(socket.getOutputStream());
+		  inputFromServer = new ObjectInputStream(socket.getInputStream());
+		  
+		  bobbyFisher = DataStructureConverter.vectorToArray((List<List<Piece>>)inputFromServer.readObject());
+		  
+		  ServerReader listener = new ServerReader();
+
+		  printBoard();
+		  
+		  Thread thread = new Thread(listener);
+		  thread.start();
+	  } catch (IOException | ClassNotFoundException e) {
 	  }
   }
-
-  /*====================================================================
-     Method Name:  chessMain
-         Purpose:  A bit of a seperate main for the chess game. This main
-                   creates the initial board using a 2D array in the background
-                   to keep track of the different piece objects which will
-                   jump around based on user moves.
-      Parameters:  None
-         Returns:  None
-  ====================================================================*/
-  public void chessMain() {
-	 
-    bobbyFisher = boardGenBlack();
-
-    printBoard();
-    interact();
-  } //end method
-
-  /*====================================================================
-     Method Name:  boardGen
-         Purpose:  This method generates the 2D array representation of
-                   the playing board, which will include the different kinds
-                   of pieces associated in each appropriate position.
-                   The 2D list is then returned to be used in other methods.
-                   Recall that a chess board is classically an 8 by 8 square
-                   board, which is represented in the length of the outer,
-                   and interior lists
-      Parameters:  None
-         Returns:  2D array representation of the playing barod
-  ====================================================================*/
-  public Piece [][] boardGenWhite() {
-    //2D array is used in background to keep track of pieces on board
-    Piece [][] board = new Piece[8][8];
-
-    //This side of the board is generagted to be black pieces
-      board[0][0] = new Rook(0, 0, false, false);
-      board[0][1] = new Knight(1, 0, false, false);
-      board[0][2] = new Bishop(2, 0, false, false);
-      board[0][3] = new Queen(3, 0, false, false);
-      board[0][4] = new King(4, 0, false, false);
-      board[0][5] = new Bishop(5, 0, false, false);
-      board[0][6] = new Knight(6, 0, false, false);
-      board[0][7] = new Rook(7, 0, false, false);
-
-      //side of the board for white pieces
-      board[7][0] = new Rook(0, 7, true, true);
-      board[7][1] = new Knight(1, 7, true, true);
-      board[7][2] = new Bishop(2, 7, true, true);
-      board[7][3] = new Queen(3, 7, true, true);
-      board[7][4] = new King(4, 7, true, true);
-      board[7][5] = new Bishop(5, 7, true, true);
-      board[7][6] = new Knight(6, 7, true, true);
-      board[7][7] = new Rook(7, 7, true, true);
-
-      //Furthermore, generates pawns using a for loop to reduce redundancy
-      for (int i = 0; i < board.length; i++) {
-        board[1][i] = new Pawn(i, 1, false, false);
-        board[6][i] = new Pawn(i, 6, true, true);
-      } //end for
-
-    return board;
-  } //end method
   
-  /*====================================================================
-  Method Name:  boardGen
-      Purpose:  This method generates the 2D array representation of
-                the playing board, which will include the different kinds
-                of pieces associated in each appropriate position.
-                The 2D list is then returned to be used in other methods.
-                Recall that a chess board is classically an 8 by 8 square
-                board, which is represented in the length of the outer,
-                and interior lists
-   Parameters:  None
-      Returns:  2D array representation of the playing barod
-====================================================================*/
-public Piece [][] boardGenBlack() {
- //2D array is used in background to keep track of pieces on board
- Piece [][] board = new Piece[8][8];
-
- //This side of the board is generagted to be black pieces
-   board[0][0] = new Rook(0, 0, false, true);
-   board[0][1] = new Knight(1, 0, false, true);
-   board[0][2] = new Bishop(2, 0, false, true);
-   board[0][3] = new Queen(3, 0, false, true);
-   board[0][4] = new King(4, 0, false, true);
-   board[0][5] = new Bishop(5, 0, false, true);
-   board[0][6] = new Knight(6, 0, false, true);
-   board[0][7] = new Rook(7, 0, false, true);
-
-   //side of the board for white pieces
-   board[7][0] = new Rook(0, 7, true, false);
-   board[7][1] = new Knight(1, 7, true, false);
-   board[7][2] = new Bishop(2, 7, true, false);
-   board[7][3] = new Queen(3, 7, true, false);
-   board[7][4] = new King(4, 7, true, false);
-   board[7][5] = new Bishop(5, 7, true, false);
-   board[7][6] = new Knight(6, 7, true, false);
-   board[7][7] = new Rook(7, 7, true, false);
-
-   //Furthermore, generates pawns using a for loop to reduce redundancy
-   for (int i = 0; i < board.length; i++) {
-     board[1][i] = new Pawn(i, 1, false, true);
-     board[6][i] = new Pawn(i, 6, true, false);
-   } //end for
-
- return board;
-} //end method
-  
-  
+  private class ServerReader implements Runnable {
+	  @SuppressWarnings("unchecked")
+	  @Override
+	  public synchronized void run() {
+		  try {
+			  while (true) {
+				  bobbyFisher = DataStructureConverter.vectorToArray((List<List<Piece>>)inputFromServer.readObject());
+				  Platform.runLater(new Runnable() {
+					  @Override
+					  public void run() {
+						  printBoard();
+					  }
+				  });
+				  //printBoard();
+			  }
+		  } catch (IOException e) {
+		  } catch (ClassNotFoundException e) {
+		  }
+	  }
+  }  
 
   /*====================================================================
      Method Name:  printBoard
@@ -262,34 +167,10 @@ public Piece [][] boardGenBlack() {
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
         if (bobbyFisher[i][j] != null) {
-          out.drawImage(bobbyFisher[i][j].graphic(), j * 80, i * 80, 80, 80);
+          out.drawImage(new Image(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
         } //end if
       } //end for
     } //end for
-  } //end method
-
-  /*====================================================================
-     Method Name:  interact
-         Purpose:  Takes in a 2D array to be modified based on different
-                   interactions. This method allows for a clicker thread
-                   to be used on the graphical interface, which allows
-                   the user to move pieces across different positions on
-                   screen. Another class is implemented inside of This
-                   method to allow for the clickable screen to be
-                   used
-      Parameters:  init: An anchorpane object which will contain this
-                   button at some point
-         Returns:  None
-  ====================================================================*/
-  public void interact() {
-    //the first turn is set to be true, to reflect that the game
-    //starts with white moving first
-    turn = true;
-
-    //an event handler is added to the graphics context, using an
-    //anonymous class to avoid creating an external privatized classes
-    //for this
-    screen.addEventHandler(MouseEvent.MOUSE_CLICKED, new MoveHandler()); //end anonymous handler
   } //end method
 
   private class MoveHandler implements EventHandler<MouseEvent> {
@@ -299,7 +180,7 @@ public Piece [][] boardGenBlack() {
 
     //actual method for using the mouse to move pieces around
     @Override
-    public void handle(MouseEvent event) {
+    public synchronized void handle(MouseEvent event) {
       //x and y values will be the pixel value over a 100 in this case,
       //as the board size is 800 by 800, with an 8x8 grid on top of this,
       //so each position will 100 pixels difference from on another,
@@ -312,9 +193,9 @@ public Piece [][] boardGenBlack() {
       if (mover == null) {
         //this check will determine which player's turn it is
         if (bobbyFisher[y][x] != null) {
-          if (bobbyFisher[y][x].getIvory() == turn) {
+          
             mover = bobbyFisher[y][x];
-          }
+          
         }
 
         //resetting of position in the background 2D array to maintain
@@ -333,7 +214,7 @@ public Piece [][] boardGenBlack() {
             if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
               out.setFill(Color.rgb(80, 80, 80, 0.75));
               out.fillRect(space.getFirst() * 80, space.getSecond() * 80, 80, 80);
-              out.drawImage(mover.graphic(), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
+              out.drawImage(new Image(mover.graphic()), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
 
             //all other possible moves are highlighted using
             //sea foam green circles
@@ -400,7 +281,11 @@ public Piece [][] boardGenBlack() {
           //mover is reset to null for next move
           mover = null;
 
-
+          try {
+        	  outputToServer.writeObject(bobbyFisher);
+          } catch (IOException e) {
+          }
+          
           printBoard();
         }
       } //end if/else

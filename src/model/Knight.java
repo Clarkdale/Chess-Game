@@ -4,11 +4,16 @@ package model;
        Purpose:  Knight instance of piece class
   Parent Class:  Piece
 ====================================================================*/
-import javafx.scene.image.Image;
+
 import java.util.*;
 
 public class Knight extends Piece {
-  public Knight(int k, int l, boolean color, boolean ivory) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public Knight(int k, int l, boolean color, boolean ivory) {
     super(k, l, color, ivory);
   } //end method
 
@@ -83,12 +88,12 @@ public class Knight extends Piece {
     return out;
   } //end method
 
-  public Image graphic() {
+  public String graphic() {
     if (super.getIvory()) {
-      return (new Image("file:images/WhiteKnight.png"));
+      return ("file:images/WhiteKnight.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/full_width_12_column/public/media/proebsting4_0.png"));
     } else {
-      return (new Image("file:images/BlackKnight.png"));
+      return ("file:images/BlackKnight.png");
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAIA_wDGAAAAAQAAAAAAAAqFAAAAJGM5YmU3MjU5LTJmOTItNGQzYS1iY2U5LTc4NjMxMTY2MmNkNg.jpg"));
     } //end if/else
   } //end method

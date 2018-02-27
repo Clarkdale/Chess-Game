@@ -6,11 +6,16 @@ package model;
                  for the png images to be accessible with minimal work
   Parent Class:  Piece
 ====================================================================*/
-import javafx.scene.image.Image;
+
 import java.util.*;
 
 public class Queen extends Piece {
-  public Queen(int i, int j, boolean type, boolean ivory) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public Queen(int i, int j, boolean type, boolean ivory) {
     super(i, j, type, ivory);
   } //end method
 
@@ -22,12 +27,12 @@ public class Queen extends Piece {
     return super.getColumn();
   } //end method
 
-  public Image graphic() {
+  public String graphic() {
     if (super.getIvory()) {
-      return (new Image("file:images/WhiteQueen.png"));
+      return ("file:images/WhiteQueen.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/allison2.jpg"));
     } else {
-      return (new Image("file:images/BlackQueen.png"));
+      return ("file:images/BlackQueen.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/obagy_0.jpg"));
     } //end if/else
   } //end method

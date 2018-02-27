@@ -4,11 +4,16 @@ package model;
        Purpose:  Rook instance of Piece class
   Parent Class:  Piece
 ====================================================================*/
-import javafx.scene.image.Image;
+
 import java.util.*;
 
 public class Rook extends Piece {
-  public Rook(int i, int j, boolean type, boolean ivory) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public Rook(int i, int j, boolean type, boolean ivory) {
     super(i, j, type, ivory);
   } //end method
 
@@ -116,12 +121,12 @@ public class Rook extends Piece {
     return possible;
   } //end method
 
-  public Image graphic() {
+  public String graphic() {
     if (super.getIvory()) {
-      return (new Image("file:images/WhiteRook.png"));
+      return ("file:images/WhiteRook.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/homer.jpg"));
     } else {
-      return (new Image("file:images/BlackRook.png"));
+      return ("file:images/BlackRook.png");
       //return (new Image("http://www.surdeanu.info/mihai/website/mihai/Surdeanu5-small.jpg"));
     } //end if/else
   } //end method

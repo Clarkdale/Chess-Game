@@ -6,10 +6,16 @@ package model;
                  in a chess game
   Parent Class:  None
 ====================================================================*/
-import javafx.scene.image.Image;
+
+
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class Piece {
+public abstract class Piece implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int row;
 	private int column;
 	private Boolean isWhite;
@@ -42,7 +48,7 @@ public abstract class Piece {
 		row = k;
 	} // end method
 
-	public abstract Image graphic();
+	public abstract String graphic();
 
 	public abstract Set<Tuple> move(Piece[][] in);
 

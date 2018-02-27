@@ -4,11 +4,15 @@ package model;
        Purpose:  Instancec of Piece class to be used for pawn objects
   Parent Class:  Piece
 ====================================================================*/
-import javafx.scene.image.Image;
+
 import java.util.*;
 
 public class Pawn extends Piece {
-  private int moved;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private int moved;
 
   public Pawn(int k, int l, boolean color, boolean ivory) {
     super(k, l, color, ivory);
@@ -93,13 +97,13 @@ public class Pawn extends Piece {
       Parameters:  None
          Returns:  Image to be displayed on GUI
   ====================================================================*/
-  public Image graphic() {
+  public String graphic() {
     if (super.getIvory()) {
       //return (new Image("tim.jpg"));
-      return (new Image("file:images/WhitePawn.png"));
+      return ("file:images/WhitePawn.png");
     } else {
       //return (new Image("stephen.jpg"));
-      return (new Image("file:images/BlackPawn.png"));
+      return ("file:images/BlackPawn.png");
     } //end if/else
   } //end method
 
