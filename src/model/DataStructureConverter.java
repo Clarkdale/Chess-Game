@@ -18,12 +18,35 @@ public class DataStructureConverter {
 		return out;
 	}
 	
-	public static Piece [][] vectorToArray(List<List<Piece>> in) {
+	public static Piece [][] vectorToArrayWhite(List<List<Piece>> in) {
 		Piece [][] out = new Piece [8][8]; 
 		for (int i = 0; i < in.size(); i++) {
 			
 			for (int j = 0; j < in.get(i).size(); j++) {
-				out[i][j] = in.get(i).get(j);
+				Piece change = in.get(i).get(j);
+				if (change != null) {
+					change.setY(i);
+					change.setX(j);
+				}
+				out[i][j] = change;
+				
+			}
+		}
+		
+		return out;
+	}
+	
+	public static Piece [][] vectorToArrayBlack(List<List<Piece>> in) {
+		Piece [][] out = new Piece [8][8]; 
+		for (int i = in.size() - 1; i >= 0; i--) {
+			
+			for (int j = in.size() - 1; j >= 0; j--) {
+				Piece change = in.get(i).get(j);
+				if (change != null) {
+					change.setY(-i + 7);
+					change.setX(-j + 7);
+				}
+				out[-i + 7][-j + 7] = change;
 				
 			}
 		}

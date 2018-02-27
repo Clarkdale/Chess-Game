@@ -25,7 +25,7 @@ import java.net.Socket;
 import java.util.*;
 import model.*;
 
-public class Chess extends Application {
+public class WhiteClient extends Application {
 	private GraphicsContext out;
 	private Canvas screen;
 	private boolean turn;
@@ -86,7 +86,7 @@ public class Chess extends Application {
 			outputToServer = new ObjectOutputStream(socket.getOutputStream());
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
 
-			bobbyFisher = DataStructureConverter.vectorToArrayBlack((List<List<Piece>>) inputFromServer.readObject());
+			bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
 
 			ServerReader listener = new ServerReader();
 
@@ -104,7 +104,7 @@ public class Chess extends Application {
 		public synchronized void run() {
 			try {
 				while (true) {
-					bobbyFisher = DataStructureConverter.vectorToArrayBlack((List<List<Piece>>) inputFromServer.readObject());
+					bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {

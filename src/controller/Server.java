@@ -98,7 +98,11 @@ public class Server {
 		board.add(1, rowTwo);
 		
 		for (int i = 2; i < 6; i++) {
-			board.add(i, new Vector<Piece>(8));
+			List<Piece> add = new Vector<Piece>(8);
+			for (int j = 0; j < 8; j++) {
+				add.add(j, null);
+			}
+			board.add(i, add);
 		}
 		
 		List<Piece> rowFour = new Vector<Piece>(8);

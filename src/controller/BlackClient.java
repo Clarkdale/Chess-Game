@@ -25,7 +25,7 @@ import java.net.Socket;
 import java.util.*;
 import model.*;
 
-public class Chess extends Application {
+public class BlackClient extends Application {
 	private GraphicsContext out;
 	private Canvas screen;
 	private boolean turn;
@@ -172,6 +172,21 @@ public class Chess extends Application {
 			} // end for
 		} // end for
 	} // end method
+	
+	private void flipBoard() {
+		Piece [][] holder = new Piece[8][8];
+		for (int i = 0; i < bobbyFisher.length; i++) {
+			for (int j = 0; j < bobbyFisher[i].length; j++) {
+				Piece add = bobbyFisher[i][j];
+				if (add != null) {
+					add.setY(-i + 7);
+					add.setX(-j + 7);
+				}
+				holder[-i + 7][-j + 7] = add;
+			}
+		}
+		bobbyFisher = holder;
+	}
 
 	private class MoveHandler implements EventHandler<MouseEvent> {
 		// mover will be the piece the user clicks to move around screen
@@ -283,11 +298,11 @@ public class Chess extends Application {
 					mover = null;
 
 					try {
+						printBoard();
+						flipBoard();
 						outputToServer.writeObject(bobbyFisher);
 					} catch (IOException e) {
 					}
-
-					printBoard();
 				}
 			} // end if/else
 		} // end internal method
