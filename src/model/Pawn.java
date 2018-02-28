@@ -40,7 +40,7 @@ private int moved;
     possible.add(new Tuple(currX, currY));
 
     //boolean check for if the piece is white
-    if (super.type()) {
+    if (super.getMoveable()) {
       //Check to add common move of one space forward
       if (currY > 0 && in[currY - 1][currX] == null) {
         possible.add(new Tuple(currX, currY - 1));
@@ -53,40 +53,20 @@ private int moved;
 
       //checks for taking pieces in diagonal direction
       if (currX != 0 && currY > 0) {
-        if (in[currY - 1][currX - 1] != null && !in[currY - 1][currX - 1].type()) {
+        if (in[currY - 1][currX - 1] != null && !(in[currY - 1][currX - 1].type() == super.type())) {
           possible.add(new Tuple(currX - 1, currY - 1));
         } //end if
       } //end if
 
       if (currX != 7 && currY > 0) {
-        if (in[currY - 1][currX + 1] != null && !in[currY - 1][currX + 1].type()) {
+        if (in[currY - 1][currX + 1] != null && !(in[currY - 1][currX + 1].type() == super.type())) {
           possible.add(new Tuple(currX + 1, currY - 1));
         } //end if
       } //end if
 
     //similar logic in opposite direction for black pieces
-    } else {
-      if (currY < 7 && in[currY + 1][currX] == null) {
-        possible.add(new Tuple(currX, currY + 1));
-      } //end if
-
-      if (moved <= 1 && currY < 6 && in[currY + 2][currX] == null && in[currY + 1][currX] == null) {
-        possible.add(new Tuple(currX, currY + 2));
-      } //end if
-
-      if (currX != 0 && currY < 7) {
-        if (in[currY + 1][currX - 1] != null && in[currY + 1][currX - 1].type()) {
-          possible.add(new Tuple(currX - 1, currY + 1));
-        } //end if
-      } //end if
-
-      if (currX != 7 && currY < 7) {
-        if (in[currY + 1][currX + 1] != null && in[currY + 1][currX + 1].type()) {
-          possible.add(new Tuple(currX + 1, currY + 1));
-        } //end if
-      } //end if
-    } //end if/else
-
+    } 
+    
     return possible;
   } //end method
 
@@ -98,7 +78,7 @@ private int moved;
          Returns:  Image to be displayed on GUI
   ====================================================================*/
   public String graphic() {
-    if (super.getIvory()) {
+    if (super.type()) {
       //return (new Image("tim.jpg"));
       return ("file:images/WhitePawn.png");
     } else {

@@ -80,8 +80,8 @@ public class WhiteClient extends Application {
 	private void openConnection() {
 
 		try {
-			InetAddress add = InetAddress.getByName("127.0.0.1");
-			socket = new Socket(add, 4000);
+			InetAddress add = InetAddress.getByName("150.135.165.4");
+			socket = new Socket("localhost", 4000);
 
 			outputToServer = new ObjectOutputStream(socket.getOutputStream());
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
@@ -192,7 +192,7 @@ public class WhiteClient extends Application {
 			// over to remove where the piecec was.
 			if (mover == null) {
 				// this check will determine which player's turn it is
-				if (bobbyFisher[y][x] != null) {
+				if (bobbyFisher[y][x] != null && bobbyFisher[y][x].getMoveable()) {
 
 					mover = bobbyFisher[y][x];
 

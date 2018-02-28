@@ -62,7 +62,7 @@ private boolean check;
   }
 
   public String graphic() {
-    if (super.getIvory()) {
+    if (super.type()) {
       return ("file:images/WhiteKing.png");
       //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
     } else {

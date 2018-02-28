@@ -115,14 +115,14 @@ public class Server {
 		
 		List<Piece> rowThree = new Vector<Piece>(8);
 		
-		rowThree.add(0, new Rook(0, 7, true, true));
-		rowThree.add(1, new Knight(1, 7, true, true));
-		rowThree.add(2, new Bishop(2, 7, true, true));
-		rowThree.add(3, new Queen(3, 7, true, true));
-		rowThree.add(4, new King(4, 7, true, true));
-		rowThree.add(5, new Bishop(5, 7, true, true));
-		rowThree.add(6, new Knight(6, 7, true, true));
-		rowThree.add(7, new Rook(7, 7, true, true));
+		rowThree.add(0, new Rook(0, 7, true, false));
+		rowThree.add(1, new Knight(1, 7, true, false));
+		rowThree.add(2, new Bishop(2, 7, true, false));
+		rowThree.add(3, new Queen(3, 7, true, false));
+		rowThree.add(4, new King(4, 7, true, false));
+		rowThree.add(5, new Bishop(5, 7, true, false));
+		rowThree.add(6, new Knight(6, 7, true, false));
+		rowThree.add(7, new Rook(7, 7, true, false));
 		
 		board.add(7, rowThree);
 	  } //end method

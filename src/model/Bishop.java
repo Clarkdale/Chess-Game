@@ -26,7 +26,7 @@ public Bishop(int i, int j, boolean type, boolean ivory) {
   } //end method
 
   public String graphic() {
-    if (super.getIvory()) {
+    if (super.type()) {
       return ("file:images/WhiteBishop.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
     } else {

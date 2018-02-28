@@ -27,6 +27,10 @@ public class DataStructureConverter {
 				if (change != null) {
 					change.setY(i);
 					change.setX(j);
+					if (change.type())
+						change.setMoveable(true);
+					else 
+						change.setMoveable(false);
 				}
 				out[i][j] = change;
 				
@@ -45,6 +49,10 @@ public class DataStructureConverter {
 				if (change != null) {
 					change.setY(-i + 7);
 					change.setX(-j + 7);
+					if (!change.type())
+						change.setMoveable(true);
+					else 
+						change.setMoveable(false);
 				}
 				out[-i + 7][-j + 7] = change;
 				

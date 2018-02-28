@@ -89,7 +89,7 @@ public Knight(int k, int l, boolean color, boolean ivory) {
   } //end method
 
   public String graphic() {
-    if (super.getIvory()) {
+    if (super.type()) {
       return ("file:images/WhiteKnight.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/full_width_12_column/public/media/proebsting4_0.png"));
     } else {

@@ -122,7 +122,7 @@ public Rook(int i, int j, boolean type, boolean ivory) {
   } //end method
 
   public String graphic() {
-    if (super.getIvory()) {
+    if (super.type()) {
       return ("file:images/WhiteRook.png");
       //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/homer.jpg"));
     } else {

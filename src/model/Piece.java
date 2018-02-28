@@ -19,13 +19,13 @@ public abstract class Piece implements Serializable {
 	private int row;
 	private int column;
 	private Boolean isWhite;
-	private Boolean ivory;
+	private Boolean moveable;
 
-	public Piece(int x, int y, boolean type, boolean color) {
+	public Piece(int x, int y, boolean type, boolean mover) {
 		row = y;
 		column = x;
 		isWhite = type;
-		setIvory(color);
+		setMoveable(mover);
 	} // end method
 
 	public int getColumn() {
@@ -39,6 +39,10 @@ public abstract class Piece implements Serializable {
 	public boolean type() {
 		return isWhite;
 	} // end method
+	
+	public void setType(Boolean in) {
+		isWhite = in;
+	}
 
 	public void setX(int k) {
 		column = k;
@@ -52,11 +56,11 @@ public abstract class Piece implements Serializable {
 
 	public abstract Set<Tuple> move(Piece[][] in);
 
-	public Boolean getIvory() {
-		return ivory;
+	public Boolean getMoveable() {
+		return moveable;
 	} //end method
 
-	public void setIvory(Boolean ivory) {
-		this.ivory = ivory;
+	public void setMoveable(Boolean ivory) {
+		this.moveable = ivory;
 	} //end method
 } // end class
