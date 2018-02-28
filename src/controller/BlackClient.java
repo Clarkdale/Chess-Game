@@ -81,7 +81,7 @@ public class BlackClient extends Application {
 
 		try {
 			InetAddress add = InetAddress.getByName("150.135.165.4");
-			socket = new Socket("localhost", 4000);
+			socket = new Socket(add, 4000);
 
 			outputToServer = new ObjectOutputStream(socket.getOutputStream());
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
