@@ -96,7 +96,7 @@ private int moved;
          Returns:  None
   ====================================================================*/
   public void setY(int in) {
-    if (in != super.getRow()) {
+    if (in != super.getRow() && in != (-super.getRow() + 7)) {
       moved++;
     } //end if
     super.setY(in);
