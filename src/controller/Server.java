@@ -23,8 +23,11 @@ public class Server {
 	private static List<List<Piece>> board;
 	private static List<ObjectOutputStream> outputStreams = new Vector<>();
 	private static ObjectOutputStream outputClient;
+	private static boolean turn = true;
+
 	public static void main(String [] args) throws IOException {
 		boardGen();
+
 		try {
 			serverSocket = new ServerSocket(4000);
 			
@@ -35,6 +38,7 @@ public class Server {
 				outputStreams.add(outputClient);
 				
 				outputClient.writeObject(board);
+				outputClient.writeObject(turn);
 				
 				ClientHandler clientHandler = new ClientHandler(inputFromClient);
 				Thread thread = new Thread(clientHandler);
@@ -54,17 +58,19 @@ public class Server {
 		
 		@Override
 		public void run() {
-			//Piece [][] prelim;
 			
 			while (true) {
 				try {
 					
 					board = DataStructureConverter.arrayToVector((Piece [][]) input.readObject());
+					turn = (boolean) input.readObject();
 					
 					for (ObjectOutputStream outputToClient : outputStreams) {
 						outputToClient.reset();
 						outputToClient.writeObject(board);
+						outputToClient.writeObject(turn);
 					}
+
 				} catch (IOException e) {
 				} catch (ClassNotFoundException e) {
 				}

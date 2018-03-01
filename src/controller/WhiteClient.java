@@ -28,7 +28,7 @@ import model.*;
 public class WhiteClient extends Application {
 	private GraphicsContext out;
 	private Canvas screen;
-	private boolean turn;
+	private boolean turn = true;
 	private Piece[][] bobbyFisher;
 	private ObjectOutputStream outputToServer;
 	private ObjectInputStream inputFromServer;
@@ -76,48 +76,79 @@ public class WhiteClient extends Application {
 		window.show();
 	} // end method
   
+	/*====================================================================
+    Method Name:  openConnection
+        Purpose:  Connects this client to the overall server. This is
+                  what allows the client to run
+     Parameters:  None
+        Returns:  None
+ 	====================================================================*/
 	@SuppressWarnings("unchecked")
 	private void openConnection() {
 
 		try {
-			InetAddress add = InetAddress.getByName("150.135.165.4");
+			//InetAddress add = InetAddress.getByName("150.135.165.4");
+			
+			//socket is connected to, in this case it is the local host for
+			//testing purposes
 			socket = new Socket("localhost", 4000);
-
+			
+			//output and input to server is initialized, so objects can be sent
+			//between the cleints and servers
 			outputToServer = new ObjectOutputStream(socket.getOutputStream());
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
-
+			
+			//board variable set to the vector recieved from the server, which
+			//is then converted to a 2D Piece array
 			bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
+			turn = (boolean) inputFromServer.readObject();
 
 			ServerReader listener = new ServerReader();
 
 			printBoard();
-
+			
+			//thread started
 			Thread thread = new Thread(listener);
 			thread.start();
 		} catch (IOException | ClassNotFoundException e) {
-		}
-	}
+		} //end try/catch
+	} //end method
   
+	/*====================================================================
+    Class Name:  ServerReader
+       Purpose:  A thread for running this client. This client recieves 
+                 data from the server and updates the screen, as well
+                 as synchronizes this thread, so that there are no 
+                 race conditions.
+  Parent Class:  Runnable
+	   @author:  Clark D Penado
+	====================================================================*/
 	private class ServerReader implements Runnable {
 		@SuppressWarnings("unchecked")
 		@Override
 		public synchronized void run() {
 			try {
+				
+				//while true is used to keep thread running while connected
+				//to server
 				while (true) {
+					//Board recieved and converted
 					bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
+					turn = (boolean) inputFromServer.readObject();
+					//anonymous handler prevents race conditions from happening
+					//by fully synchronizing
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							printBoard();
-						}
-					});
-					// printBoard();
-				}
+						} //end method
+					}); //end anonymous handler
+				} //end while
 			} catch (IOException e) {
 			} catch (ClassNotFoundException e) {
-			}
-		}
-	}
+			} //end try/catch
+		} //end method
+	} //end class
 
 	/*====================================================================
     Method Name:  printBoard
@@ -192,7 +223,7 @@ public class WhiteClient extends Application {
 			// over to remove where the piecec was.
 			if (mover == null) {
 				// this check will determine which player's turn it is
-				if (bobbyFisher[y][x] != null && bobbyFisher[y][x].getMoveable()) {
+				if (bobbyFisher[y][x] != null && turn && bobbyFisher[y][x].getMoveable()) {
 
 					mover = bobbyFisher[y][x];
 
@@ -270,12 +301,15 @@ public class WhiteClient extends Application {
 							} // end if/ else
 						} // end if
 					} // end if
-
+					
+					boolean out = true;
+					if (mover.getColumn() != x || mover.getRow() != y)
+						out = false;
 					// these statements will changeg the piece object
 					// according to where it was moved on the board
 					mover.setX(x);
 					mover.setY(y);
-
+				
 					// board is adjusted after move to fully represent game
 					bobbyFisher[y][x] = mover;
 
@@ -283,12 +317,12 @@ public class WhiteClient extends Application {
 					mover = null;
 
 					try {
+						printBoard();
 						outputToServer.writeObject(bobbyFisher);
+						outputToServer.writeObject(out);
 					} catch (IOException e) {
-					}
-
-					printBoard();
-				}
+					} //end try/catch
+				} //end if
 			} // end if/else
 		} // end internal method
 	} // end class
