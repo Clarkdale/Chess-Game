@@ -2,7 +2,7 @@ package controller;
 /*====================================================================
     Class Name:  Chess
        Purpose:  Entry point for the game
-  Parent Class:  None
+  Parent Class:  Application
 	   @author:  Clark D Penado
 ====================================================================*/
 import javafx.application.Application;
@@ -204,21 +204,46 @@ public class BlackClient extends Application {
 		} // end for
 	} // end method
 	
+	/*====================================================================
+    Method Name:  flipBoard
+        Purpose:  Changes the side of the board back to white facing the
+                  user... To be used when sending the edited board back to
+                  the server, in order to maintain consitancy
+     Parameters:  None
+        Returns:  None
+ 	====================================================================*/
 	private void flipBoard() {
+		// 2D piece array used as a holder for the new converted board
 		Piece [][] holder = new Piece[8][8];
+		
+		//nested for loop iterates over all locations in the board
 		for (int i = 0; i < bobbyFisher.length; i++) {
 			for (int j = 0; j < bobbyFisher[i].length; j++) {
 				Piece add = bobbyFisher[i][j];
+				
+				//when the piece is not null, the associated x and y
+				//coordinates are reassigned
 				if (add != null) {
 					add.setY(-i + 7);
 					add.setX(-j + 7);
-				}
+				} //end if
+				
+				//the "oppositie" location in the board is set to this
+				//piece object
 				holder[-i + 7][-j + 7] = add;
-			}
-		}
+			} //end for
+		} //end for
 		bobbyFisher = holder;
-	}
+	} //end method
 
+	/*====================================================================
+		    Class Name:  MoveHandler
+		       Purpose:  Allows the user to click around on the gameboard, 
+		                 moving pieces when necessary around the board
+		                 and sending the moves back to the server
+		  Parent Class:  EventHandler
+			   @author:  Clark D Penado
+	====================================================================*/
 	private class MoveHandler implements EventHandler<MouseEvent> {
 		// mover will be the piece the user clicks to move around screen
 		Piece mover = null;

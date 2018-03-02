@@ -2,7 +2,7 @@ package controller;
 /*====================================================================
     Class Name:  Chess
        Purpose:  Entry point for the game
-  Parent Class:  None
+  Parent Class:  Application
 	   @author:  Clark D Penado
 ====================================================================*/
 import javafx.application.Application;
@@ -204,6 +204,14 @@ public class WhiteClient extends Application {
 		} // end for
 	} // end method
 
+	/*====================================================================
+    Class Name:  MoveHandler
+       Purpose:  Allows the user to click around on the gameboard, 
+                 moving pieces when necessary around the board
+                 and sending the moves back to the server
+  Parent Class:  EventHandler
+	   @author:  Clark D Penado
+	====================================================================*/
 	private class MoveHandler implements EventHandler<MouseEvent> {
 		// mover will be the piece the user clicks to move around screen
 		Piece mover = null;
