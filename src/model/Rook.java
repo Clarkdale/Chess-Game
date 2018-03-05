@@ -53,7 +53,7 @@ public Rook(int i, int j, boolean type, boolean ivory) {
 
     //For loop iterates up to 8, this is the maximum number of squares on the
     //board
-    for (int i = 0; i < 8; i++) {
+    for (int i = 1; i < 8; i++) {
       //This statement adds all potential moves above/below the piece to the
       //overall moveset
       if (currY - i >= 0) {

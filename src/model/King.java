@@ -12,12 +12,10 @@ public class King extends Piece {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private boolean check;
 	private int moved;
 
 	public King(int i, int j, boolean type, boolean ivory) {
 		super(i, j, type, ivory);
-		check = false;
 		moved = 0;
 	} // end method
 
@@ -36,14 +34,6 @@ public class King extends Piece {
 
 		super.setY(in);
 	}
-
-	public void setCheck(boolean in) {
-		check = in;
-	}
-
-	public boolean getCheck() {
-		return check;
-	}
 	
 	public boolean inCheck(Piece [][] in) {
 		//TODO: look at all movesets of the opponents 
@@ -51,27 +41,20 @@ public class King extends Piece {
 		// reset the check boolean instance variable to
 		// true/false depending on the result and return
 		// said variable
-		Set<Piece> opposing = new HashSet<>();
-		for (Piece [] line : in) {
-			for (Piece solo : line) {
-				if (solo != null && solo.type() != super.type()) 
-					opposing.add(solo);
+		Set<Piece> opposite = new HashSet<>();
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (in[i][j] != null && in[i][j].type() != this.type())
+					opposite.add(in[i][j]);
 			}
 		}
 		
-		for (Piece enemy : opposing) {
-			Set<Tuple> moves = enemy.move(in);
-			if (enemy instanceof Bishop)
-				System.out.println(moves.size());
-			for (Tuple attack : moves) {
-				if (super.getColumn() == attack.getFirst() && super.getRow() == attack.getSecond()) {
-					setCheck(true);
+		for (Piece enemy : opposite) {
+			for (Tuple move : in[enemy.getRow()][enemy.getColumn()].move(in)) {
+				if (super.getColumn() == move.getFirst() && super.getRow() == move.getSecond())
 					return true;
-				}
 			}
 		}
-		
-		setCheck(false);
 		return false;
 	}
 
