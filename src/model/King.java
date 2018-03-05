@@ -12,145 +12,177 @@ public class King extends Piece {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-private boolean check;
-  private int moved;
+	private boolean check;
+	private int moved;
 
-  public King(int i, int j, boolean type, boolean ivory) {
-    super(i, j, type, ivory);
-    check = false;
-    moved = 0;
-  } //end method
+	public King(int i, int j, boolean type, boolean ivory) {
+		super(i, j, type, ivory);
+		check = false;
+		moved = 0;
+	} // end method
 
-  public void setX(int in) {
-    if (in != super.getColumn()) {
-      moved++;
-    }
+	public void setX(int in) {
+		if (in != super.getColumn()) {
+			moved++;
+		}
 
-    super.setX(in);
-  }
+		super.setX(in);
+	}
 
-  public void setY(int in) {
-    if (in != super.getRow()) {
-      moved++;
-    }
+	public void setY(int in) {
+		if (in != super.getRow() && in != (-super.getRow() + 7)) {
+			moved++;
+		}
 
-    super.setY(in);
-  }
+		super.setY(in);
+	}
 
-  public void setCheck(boolean in) {
-    check = in;
-  }
+	public void setCheck(boolean in) {
+		check = in;
+	}
 
-  public boolean inCheck() {
-    return check;
-  }
+	public boolean getCheck() {
+		return check;
+	}
+	
+	public boolean inCheck(Piece [][] in) {
+		//TODO: look at all movesets of the opponents 
+		// pieces, and if a move contains the king in it, 
+		// reset the check boolean instance variable to
+		// true/false depending on the result and return
+		// said variable
+		Set<Piece> opposing = new HashSet<>();
+		for (Piece [] line : in) {
+			for (Piece solo : line) {
+				if (solo != null && solo.type() != super.type()) 
+					opposing.add(solo);
+			}
+		}
+		
+		for (Piece enemy : opposing) {
+			Set<Tuple> moves = enemy.move(in);
+			if (enemy instanceof Bishop)
+				System.out.println(moves.size());
+			for (Tuple attack : moves) {
+				if (super.getColumn() == attack.getFirst() && super.getRow() == attack.getSecond()) {
+					setCheck(true);
+					return true;
+				}
+			}
+		}
+		
+		setCheck(false);
+		return false;
+	}
 
-  public int getRow() {
-    return super.getRow();
-  } //end method
+	public int getRow() {
+		return super.getRow();
+	} // end method
 
-  public int getColumn() {
-    return super.getColumn();
-  } //end method
+	public int getColumn() {
+		return super.getColumn();
+	} // end method
 
-  public boolean type() {
-    return super.type();
-  } //end method
+	public boolean type() {
+		return super.type();
+	} // end method
 
-  public boolean castle() {
-    return moved == 0;
-  }
+	public boolean castle() {
+		return moved == 0;
+	}
 
-  public String graphic() {
-    if (super.type()) {
-      return ("file:images/WhiteKing.png");
-      //return (new Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
-    } else {
-      return ("file:images/BlackKing.png");
-      //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/debray.jpg"));
-    } //end if/else
-  } //end method
+	public String graphic() {
+		if (super.type()) {
+			return ("file:images/WhiteKing.png");
+			// return (new
+			// Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
+		} else {
+			return ("file:images/BlackKing.png");
+			// return (new
+			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/debray.jpg"));
+		} // end if/else
+	} // end method
 
-  /*====================================================================
-     Method Name:  move
-         Purpose:  Creates a set of tuples, which hold (x.y) positions
-                   on the board as to where this type of piece could
-                   potentially move. Essentially a "scan board" method
-      Parameters:  in: A 2D array of pieces, which represent the board
-         Returns:  A set of tuples of all possible moves
-  ====================================================================*/
-  public Set<Tuple> move(Piece [][] in) {
-    //current variables set to compare back to in later logic
-    int currX = super.getColumn();
-    int currY = super.getRow();
+	/*====================================================================
+    Method Name:  move
+        Purpose:  Creates a set of tuples, which hold (x.y) positions
+                  on the board as to where this type of piece could
+                  potentially move. Essentially a "scan board" method
+     Parameters:  in: A 2D array of pieces, which represent the board
+        Returns:  A set of tuples of all possible moves
+ 	====================================================================*/
+	public Set<Tuple> move(Piece[][] in) {
+		// current variables set to compare back to in later logic
+		int currX = super.getColumn();
+		int currY = super.getRow();
 
-    //Set of possile moves of tuples initialized
-    Set<Tuple> out = new HashSet<>();
+		// Set of possile moves of tuples initialized
+		Set<Tuple> out = new HashSet<>();
 
-    //adds original position to set, original position is considered a "Invalid
-    //move"
-    out.add(new Tuple(currX, currY));
+		// adds original position to set, original position is considered a "Invalid
+		// move"
+		out.add(new Tuple(currX, currY));
 
-    //logic for all moves one square to the left of the current king loccation,
-    //in relation to the initial position.
-    if (currX - 1 >= 0) {
-      if (currY - 1 >= 0) {
-        if (in[currY - 1][currX - 1] == null || in[currY - 1][currX - 1].type() != super.type()) {
-          out.add(new Tuple(currX - 1, currY - 1));
-        } //end if
-      } //end if
+		// logic for all moves one square to the left of the current king loccation,
+		// in relation to the initial position.
+		if (currX - 1 >= 0) {
+			if (currY - 1 >= 0) {
+				if (in[currY - 1][currX - 1] == null || in[currY - 1][currX - 1].type() != super.type()) {
+					out.add(new Tuple(currX - 1, currY - 1));
+				} // end if
+			} // end if
 
-      if (currY + 1 <= 7) {
-        if (in[currY + 1][currX - 1] == null || in[currY + 1][currX - 1].type() != super.type()) {
-          out.add(new Tuple(currX - 1, currY + 1));
-        } //end if
-      } //end if
+			if (currY + 1 <= 7) {
+				if (in[currY + 1][currX - 1] == null || in[currY + 1][currX - 1].type() != super.type()) {
+					out.add(new Tuple(currX - 1, currY + 1));
+				} // end if
+			} // end if
 
-      if (in[currY][currX - 1] == null || in[currY][currX - 1].type() != super.type()) {
-        out.add(new Tuple(currX - 1, currY));
-      } //end if
-    } //end if
+			if (in[currY][currX - 1] == null || in[currY][currX - 1].type() != super.type()) {
+				out.add(new Tuple(currX - 1, currY));
+			} // end if
+		} // end if
 
-    //handles logic for all potential moves to the right of the initial king
-    //posiiton
-    if (currX + 1 <= 7) {
-      if (currY - 1 >= 0) {
-        if (in[currY - 1][currX + 1] == null || in[currY - 1][currX + 1].type() != super.type()) {
-          out.add(new Tuple(currX + 1, currY - 1));
-        } //end if
-      } //end if
+		// handles logic for all potential moves to the right of the initial king
+		// posiiton
+		if (currX + 1 <= 7) {
+			if (currY - 1 >= 0) {
+				if (in[currY - 1][currX + 1] == null || in[currY - 1][currX + 1].type() != super.type()) {
+					out.add(new Tuple(currX + 1, currY - 1));
+				} // end if
+			} // end if
 
-      if (currY + 1 <= 7) {
-        if (in[currY + 1][currX + 1] == null || in[currY + 1][currX + 1].type() != super.type()) {
-          out.add(new Tuple(currX + 1, currY + 1));
-        } //end if
-      } //end if
+			if (currY + 1 <= 7) {
+				if (in[currY + 1][currX + 1] == null || in[currY + 1][currX + 1].type() != super.type()) {
+					out.add(new Tuple(currX + 1, currY + 1));
+				} // end if
+			} // end if
 
-      if (in[currY][currX + 1] == null || in[currY][currX + 1].type() != super.type()) {
-        out.add(new Tuple(currX + 1, currY));
-      } //end if
-    } //end if
+			if (in[currY][currX + 1] == null || in[currY][currX + 1].type() != super.type()) {
+				out.add(new Tuple(currX + 1, currY));
+			} // end if
+		} // end if
 
-    //logic for handling above/below the initial king position
-    if (currY - 1 >= 0) {
-      if (in[currY - 1][currX] == null || in[currY - 1][currX].type() != super.type()) {
-        out.add(new Tuple(currX, currY - 1));
-      } //end if
-    } //end if
+		// logic for handling above/below the initial king position
+		if (currY - 1 >= 0) {
+			if (in[currY - 1][currX] == null || in[currY - 1][currX].type() != super.type()) {
+				out.add(new Tuple(currX, currY - 1));
+			} // end if
+		} // end if
 
-    //logic for above.below moves in relation to the initial king position
-    if (currY + 1 <= 7) {
-      if (in[currY + 1][currX] == null || in[currY + 1][currX].type() != super.type()) {
-        out.add(new Tuple(currX, currY + 1));
-      } //end if
-    } //end if
+		// logic for above.below moves in relation to the initial king position
+		if (currY + 1 <= 7) {
+			if (in[currY + 1][currX] == null || in[currY + 1][currX].type() != super.type()) {
+				out.add(new Tuple(currX, currY + 1));
+			} // end if
+		} // end if
 
-    if ((currY == 7 || currY == 0) && currX == 4) {
-      if (in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
-        out.add(new Tuple(currX + 2, currY));
-      }
-    }
+		if ((currY == 7 || currY == 0) && currX == 4) {
+			if (in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
+				out.add(new Tuple(currX + 2, currY));
+			}
+		}
 
-    return out;
-  } //end method
-} //end class
+		return out;
+	} // end method
+} // end class

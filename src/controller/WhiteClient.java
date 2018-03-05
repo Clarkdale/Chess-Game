@@ -199,6 +199,13 @@ public class WhiteClient extends Application {
 			for (int j = 0; j < 8; j++) {
 				if (bobbyFisher[i][j] != null) {
 					out.drawImage(new Image(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
+					if (bobbyFisher[i][j] instanceof King) {
+						King reCheck = (King) bobbyFisher[i][j];
+						if (reCheck.inCheck(bobbyFisher)) {
+							out.setFill(Color.rgb(50, 0, 0, 0.5));
+							out.fillRect(j * 80, i * 80, 80, 80);
+						}
+					}
 				} // end if
 			} // end for
 		} // end for
@@ -253,8 +260,7 @@ public class WhiteClient extends Application {
 						if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
 							out.setFill(Color.rgb(80, 80, 80, 0.75));
 							out.fillRect(space.getFirst() * 80, space.getSecond() * 80, 80, 80);
-							out.drawImage(new Image(mover.graphic()), mover.getColumn() * 80, mover.getRow() * 80, 80,
-									80);
+							out.drawImage(new Image(mover.graphic()), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
 
 							// all other possible moves are highlighted using
 							// sea foam green circles

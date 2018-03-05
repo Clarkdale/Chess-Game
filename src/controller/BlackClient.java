@@ -199,6 +199,13 @@ public class BlackClient extends Application {
 			for (int j = 0; j < 8; j++) {
 				if (bobbyFisher[i][j] != null) {
 					out.drawImage(new Image(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
+					if (bobbyFisher[i][j] instanceof King) {
+						King reCheck = (King) bobbyFisher[i][j];
+						if (reCheck.inCheck(bobbyFisher)) {
+							out.setFill(Color.rgb(50, 0, 0, 0.5));
+							out.fillRect(j * 80, i * 80, 80, 80);
+						}
+					}
 				} // end if
 			} // end for
 		} // end for
