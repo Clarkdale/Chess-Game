@@ -33,6 +33,7 @@ public class BlackClient extends Application {
 	private ObjectOutputStream outputToServer;
 	private ObjectInputStream inputFromServer;
 	private Socket socket;
+	private King king;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -102,6 +103,7 @@ public class BlackClient extends Application {
 			//is then converted to a 2D Piece array
 			bobbyFisher = DataStructureConverter.vectorToArrayBlack((List<List<Piece>>) inputFromServer.readObject());
 			turn = (boolean) inputFromServer.readObject();
+			findKing();
 			
 			ServerReader listener = new ServerReader();
 
@@ -140,6 +142,7 @@ public class BlackClient extends Application {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							findKing();
 							printBoard();
 						} //end method
 					}); //end anonymous handler
@@ -149,6 +152,16 @@ public class BlackClient extends Application {
 			} //end try/catch
 		} //end method
 	} //end class
+	
+	public void findKing() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (bobbyFisher[i][j] != null && !bobbyFisher[i][j].type() && (bobbyFisher[i][j] instanceof King)) {
+					king = (King) bobbyFisher[i][j];
+				}
+			}
+		}
+	}
 
 	/*====================================================================
     Method Name:  printBoard

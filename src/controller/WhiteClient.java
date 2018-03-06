@@ -33,6 +33,7 @@ public class WhiteClient extends Application {
 	private ObjectOutputStream outputToServer;
 	private ObjectInputStream inputFromServer;
 	private Socket socket;
+	private King king;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -102,7 +103,8 @@ public class WhiteClient extends Application {
 			//is then converted to a 2D Piece array
 			bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
 			turn = (boolean) inputFromServer.readObject();
-
+			findKing();
+			
 			ServerReader listener = new ServerReader();
 
 			printBoard();
@@ -135,11 +137,13 @@ public class WhiteClient extends Application {
 					//Board recieved and converted
 					bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
 					turn = (boolean) inputFromServer.readObject();
+
 					//anonymous handler prevents race conditions from happening
 					//by fully synchronizing
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							findKing();
 							printBoard();
 						} //end method
 					}); //end anonymous handler
@@ -149,6 +153,16 @@ public class WhiteClient extends Application {
 			} //end try/catch
 		} //end method
 	} //end class
+	
+	public void findKing() {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (bobbyFisher[i][j] != null && bobbyFisher[i][j].type() && (bobbyFisher[i][j] instanceof King)) {
+					king = (King) bobbyFisher[i][j];
+				}
+			}
+		}
+	}
 
 	/*====================================================================
     Method Name:  printBoard
@@ -241,15 +255,19 @@ public class WhiteClient extends Application {
 				if (bobbyFisher[y][x] != null && turn && bobbyFisher[y][x].getMoveable()) {
 
 					mover = bobbyFisher[y][x];
-
+					bobbyFisher[y][x] = null;
 				}
 
 				// resetting of position in the background 2D array to maintain
 				// consistency in gameplay
 				if (mover != null) {
-					bobbyFisher[y][x] = null;
-
-					potential = mover.move(bobbyFisher);
+					if (!king.inCheck(bobbyFisher)) {
+						potential = mover.move(bobbyFisher);
+					} else {
+						potential = new HashSet<>();
+						Tuple only = new Tuple(x, y);
+						potential.add(only);
+					}
 
 					// this for loop will parse over all the possible moves,
 					// and highlight where the player can move based on
