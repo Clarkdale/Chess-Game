@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
 import model.*;
@@ -154,15 +153,23 @@ public class WhiteClient extends Application {
 		} //end method
 	} //end class
 	
+	/*====================================================================
+    Method Name:  findKing
+        Purpose:  updates the global king variable from the board by parsing
+                  over every piece until this client's king is found
+     Parameters:  None
+        Returns:  None
+ 	====================================================================*/
 	public void findKing() {
+		// nested for loop used for iterating over each piece
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (bobbyFisher[i][j] != null && bobbyFisher[i][j].type() && (bobbyFisher[i][j] instanceof King)) {
+				if (bobbyFisher[i][j] != null && bobbyFisher[i][j].type() && (bobbyFisher[i][j] instanceof King)) 
 					king = (King) bobbyFisher[i][j];
-				}
-			}
-		}
-	}
+				
+			} // end for
+		} // end for
+	} // end method
 
 	/*====================================================================
     Method Name:  printBoard
@@ -260,13 +267,20 @@ public class WhiteClient extends Application {
 
 				// resetting of position in the background 2D array to maintain
 				// consistency in gameplay
-				if (mover != null) {
+				if (mover != null) {				
 					if (!king.inCheck(bobbyFisher)) {
 						potential = mover.move(bobbyFisher);
 					} else {
+						Set<Tuple> prelim = mover.move(bobbyFisher);
 						potential = new HashSet<>();
-						Tuple only = new Tuple(x, y);
-						potential.add(only);
+						for (Tuple each : prelim) {
+							bobbyFisher[each.getSecond()][each.getFirst()] = mover;
+							if (!king.inCheck(bobbyFisher))
+								potential.add(each);
+							bobbyFisher[each.getSecond()][each.getFirst()] = null;
+						}
+						Tuple last = new Tuple(x, y);
+						potential.add(last);
 					}
 
 					// this for loop will parse over all the possible moves,
