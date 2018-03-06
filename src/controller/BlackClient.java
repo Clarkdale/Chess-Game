@@ -220,11 +220,14 @@ public class BlackClient extends Application {
 					out.drawImage(new Image(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
 					if (bobbyFisher[i][j] instanceof King) {
 						King reCheck = (King) bobbyFisher[i][j];
+						
+						//a red transparent square is drawn over the king if the king
+						// is in check at this point
 						if (reCheck.inCheck(bobbyFisher)) {
 							out.setFill(Color.rgb(255, 0, 0, 0.5));
 							out.fillRect(j * 80, i * 80, 80, 80);
-						}
-					}
+						} //end if
+					} //end if
 				} // end if
 			} // end for
 		} // end for
@@ -296,8 +299,11 @@ public class BlackClient extends Application {
 
 				}
 
-				// resetting of position in the background 2D array to maintain
-				// consistency in gameplay
+				//This boolean block will decide whether or not a move is valid
+				// corresponding to whether or not the user is in check. If the
+				// user is not in check, then the set of possible moves is set 
+				// to the default one that is returned from the appropriate Piece
+				// objects
 				if (mover != null) {
 					if (!king.inCheck(bobbyFisher)) {
 						potential = mover.move(bobbyFisher);
@@ -309,10 +315,12 @@ public class BlackClient extends Application {
 							if (!king.inCheck(bobbyFisher))
 								potential.add(each);
 							bobbyFisher[each.getSecond()][each.getFirst()] = null;
-						}
+						} //end for
+						
+						// same square is always a valid move
 						Tuple last = new Tuple(x, y);
 						potential.add(last);
-					}
+					} //end if/else
 
 					// this for loop will parse over all the possible moves,
 					// and highlight where the player can move based on
