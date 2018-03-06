@@ -286,15 +286,20 @@ public class BlackClient extends Application {
 				if (bobbyFisher[y][x] != null && !turn && bobbyFisher[y][x].getMoveable()) {
 
 					mover = bobbyFisher[y][x];
+					bobbyFisher[y][x] = null;
 
 				}
 
 				// resetting of position in the background 2D array to maintain
 				// consistency in gameplay
 				if (mover != null) {
-					bobbyFisher[y][x] = null;
-
-					potential = mover.move(bobbyFisher);
+					if (!king.inCheck(bobbyFisher)) {
+						potential = mover.move(bobbyFisher);
+					} else {
+						potential = new HashSet<>();
+						Tuple only = new Tuple(x, y);
+						potential.add(only);
+					}
 
 					// this for loop will parse over all the possible moves,
 					// and highlight where the player can move based on
