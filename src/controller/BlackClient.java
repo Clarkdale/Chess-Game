@@ -311,10 +311,11 @@ public class BlackClient extends Application {
 						Set<Tuple> prelim = mover.move(bobbyFisher);
 						potential = new HashSet<>();
 						for (Tuple each : prelim) {
+							Piece holder = bobbyFisher[each.getSecond()][each.getFirst()];
 							bobbyFisher[each.getSecond()][each.getFirst()] = mover;
 							if (!king.inCheck(bobbyFisher))
 								potential.add(each);
-							bobbyFisher[each.getSecond()][each.getFirst()] = null;
+							bobbyFisher[each.getSecond()][each.getFirst()] = holder;
 						} //end for
 						
 						// same square is always a valid move

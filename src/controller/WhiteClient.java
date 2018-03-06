@@ -278,10 +278,11 @@ public class WhiteClient extends Application {
 						Set<Tuple> prelim = mover.move(bobbyFisher);
 						potential = new HashSet<>();
 						for (Tuple each : prelim) {
+							Piece holder = bobbyFisher[each.getSecond()][each.getFirst()];
 							bobbyFisher[each.getSecond()][each.getFirst()] = mover;
 							if (!king.inCheck(bobbyFisher))
 								potential.add(each);
-							bobbyFisher[each.getSecond()][each.getFirst()] = null;
+							bobbyFisher[each.getSecond()][each.getFirst()] = holder;
 						} // end for
 						
 						//Moving the piece to its original location is always valid
