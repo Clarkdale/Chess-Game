@@ -83,6 +83,49 @@ public class King extends Piece {
 			} //end if
 		} // end for
 		
+		// following boolean logic handles case where there is a king 
+		// in a neighboring position. This assists in preventing stack
+		// overflow errors between the two kings on board
+		if (x - 1 >= 0) {
+			if (y - 1 >= 0) {
+				if (in[y - 1][x - 1] instanceof King)
+					return true;
+			} //end if
+			
+			if (y + 1 <= 7) {
+				if (in[y + 1][x - 1] instanceof King)
+					return true;
+			} // end if
+			
+			if (in[y][x - 1] instanceof King)
+				return true;
+		} //end if
+		
+		if (x + 1 <= 7) {
+			if (y - 1 >= 0) {
+				if (in[y - 1][x + 1] instanceof King)
+					return true;
+			} //end if
+			
+			if (y + 1 <= 7) {
+				if (in[y + 1][x + 1] instanceof King)
+					return true;
+			} //end if
+			
+			if (in[y][x + 1] instanceof King)
+				return true;
+		} //end if
+		
+		if (y - 1 >= 0) {
+			if (in[y - 1][x] instanceof King)
+				return true;
+		} //end if
+		
+		if (y + 1 <= 7) {
+			if (in[y + 1][x] instanceof King)
+				return true;
+		} //end if
+		
 		return false;
 	} // end method
 
