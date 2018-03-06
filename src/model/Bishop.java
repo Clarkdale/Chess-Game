@@ -8,32 +8,34 @@ package model;
 import java.util.*;
 
 public class Bishop extends Piece {
-  /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-public Bishop(int i, int j, boolean type, boolean ivory) {
-    super(i, j, type, ivory);
-  } //end method
+	public Bishop(int i, int j, boolean type, boolean ivory) {
+		super(i, j, type, ivory);
+	} // end method
 
-  public int getRow() {
-    return super.getRow();
-  } //end method
+	public int getRow() {
+		return super.getRow();
+	} // end method
 
-  public int getColumn() {
-    return super.getColumn();
-  } //end method
+	public int getColumn() {
+		return super.getColumn();
+	} // end method
 
-  public String graphic() {
-    if (super.type()) {
-      return ("file:images/WhiteBishop.png");
-      //return (new Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
-    } else {
-      return ("file:images/BlackBishop.png");
-      //return (new Image("https://www.amrita.edu/site/ISSISP2016/images/ChristianCollberg.jpg"));
-    } //end if/else
-  } //end method
+	public String graphic() {
+		if (super.type()) {
+			return ("file:images/WhiteBishop.png");
+			// return (new
+			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
+		} else {
+			return ("file:images/BlackBishop.png");
+			// return (new
+			// Image("https://www.amrita.edu/site/ISSISP2016/images/ChristianCollberg.jpg"));
+		} // end if/else
+	} // end method
 
   /*====================================================================
      Method Name:  move
