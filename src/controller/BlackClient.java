@@ -202,7 +202,7 @@ public class BlackClient extends Application {
 					if (bobbyFisher[i][j] instanceof King) {
 						King reCheck = (King) bobbyFisher[i][j];
 						if (reCheck.inCheck(bobbyFisher)) {
-							out.setFill(Color.rgb(50, 0, 0, 0.5));
+							out.setFill(Color.rgb(255, 0, 0, 0.5));
 							out.fillRect(j * 80, i * 80, 80, 80);
 						}
 					}
@@ -322,31 +322,22 @@ public class BlackClient extends Application {
 					} // end if
 
 					// additional logic to allow castling
-					if (mover instanceof King && x == 6) {
-						King re = (King) mover;
-
-						// helper method from king class used to prevent unintentional
-						// movement of the rook
-						if (re.castle()) {
-							Piece assist;
-
-							// White side
-							if (mover.type()) {
-								assist = (Rook) bobbyFisher[7][7];
-								assist.setX(5);
-								assist.setY(7);
-								bobbyFisher[7][7] = null;
-								bobbyFisher[7][5] = assist;
-
-								// black side
-							} else {
-								assist = (Rook) bobbyFisher[0][7];
-								assist.setX(5);
-								assist.setY(0);
-								bobbyFisher[0][7] = null;
-								bobbyFisher[0][5] = assist;
-							} // end if/ else
-						} // end if
+					if (mover instanceof King) {
+						Piece assist;
+						
+						if (x == 1) {
+							assist = bobbyFisher[7][0];
+							assist.setX(2);
+							bobbyFisher[7][0] = null;
+							bobbyFisher[7][2] = assist;
+						}
+						
+						if (x == 6) {
+							assist = bobbyFisher[7][7];
+							assist.setX(5);
+							bobbyFisher[7][7] = null;
+							bobbyFisher[7][5] = assist;
+						}
 					} // end if
 					
 					boolean out = false;

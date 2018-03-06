@@ -20,7 +20,7 @@ public class King extends Piece {
 	} // end method
 
 	public void setX(int in) {
-		if (in != super.getColumn()) {
+		if (in != super.getColumn() && in != (-super.getColumn() + 7)) {
 			moved++;
 		}
 
@@ -160,9 +160,18 @@ public class King extends Piece {
 			} // end if
 		} // end if
 
-		if ((currY == 7 || currY == 0) && currX == 4) {
-			if (in[currY][currX + 1] == null && in[currY][currX + 2] == null) {
-				out.add(new Tuple(currX + 2, currY));
+		if ((currY == 7 || currY == 0) && this.castle()) {
+			if (this.type()) {
+				if (in[currY][currX + 1] == null && in[currY][currX + 2] == null && (in[currY][currX + 3] instanceof Rook)) 
+					out.add(new Tuple(currX + 2, currY));
+				
+				if (in[currY][currX - 1] == null && in[currY][currX - 2] == null && in[currY][currX - 3] == null && (in[currY][currX - 4] instanceof Rook))
+					out.add(new Tuple(currX - 3, currY));
+			} else {
+				if (in[currY][currX - 1] == null && in[currY][currX - 2] == null && (in[currY][currX - 3] instanceof Rook))
+					out.add(new Tuple(currX - 2, currY));
+				if (in[currY][currX + 1] == null && in[currY][currX + 2] == null && in[currY][currX + 3] == null && (in[currY][currX + 4] instanceof Rook))
+					out.add(new Tuple(currX + 3, currY));
 			}
 		}
 

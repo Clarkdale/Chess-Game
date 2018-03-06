@@ -202,7 +202,7 @@ public class WhiteClient extends Application {
 					if (bobbyFisher[i][j] instanceof King) {
 						King reCheck = (King) bobbyFisher[i][j];
 						if (reCheck.inCheck(bobbyFisher)) {
-							out.setFill(Color.rgb(50, 0, 0, 0.5));
+							out.setFill(Color.rgb(255, 0, 0, 0.5));
 							out.fillRect(j * 80, i * 80, 80, 80);
 						}
 					}
@@ -291,12 +291,10 @@ public class WhiteClient extends Application {
 					// additional logic to allow castling
 					if (mover instanceof King && x == 6) {
 						King re = (King) mover;
-
 						// helper method from king class used to prevent unintentional
 						// movement of the rook
 						if (re.castle()) {
 							Piece assist;
-
 							// White side
 							if (mover.type()) {
 								assist = (Rook) bobbyFisher[7][7];
