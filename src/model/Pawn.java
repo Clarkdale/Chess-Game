@@ -80,10 +80,10 @@ public class Pawn extends Piece {
 	public String graphic() {
 		if (super.type()) {
 			// return (new Image("tim.jpg"));
-			return ("file:images/WhitePawn.png");
+			return ("WhitePawn");
 		} else {
 			// return (new Image("stephen.jpg"));
-			return ("file:images/BlackPawn.png");
+			return ("BlackPawn");
 		} // end if/else
 	} // end method
 

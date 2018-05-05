@@ -147,11 +147,11 @@ public class King extends Piece {
 
 	public String graphic() {
 		if (super.type()) {
-			return ("file:images/WhiteKing.png");
+			return ("WhiteKing");
 			// return (new
 			// Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/2/000/18f/383/0ea0035.jpg"));
 		} else {
-			return ("file:images/BlackKing.png");
+			return ("BlackKing");
 			// return (new
 			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/debray.jpg"));
 		} // end if/else

@@ -33,6 +33,7 @@ public class WhiteClient extends Application {
 	private ObjectInputStream inputFromServer;
 	private Socket socket;
 	private King king;
+	private FlyWeight drawer;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -54,6 +55,8 @@ public class WhiteClient extends Application {
 		window.getIcons().add(new Image("file:images/WhiteKnight.png"));
 		// overall borderpain created
 		BorderPane rootPane = new BorderPane();
+		
+		drawer = new FlyWeight();
 
 		// Interactive window is made, which will later have a listener for clicking
 		// on screen
@@ -219,7 +222,7 @@ public class WhiteClient extends Application {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				if (bobbyFisher[i][j] != null) {
-					out.drawImage(new Image(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
+					out.drawImage(drawer.retrieveImage(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
 					if (bobbyFisher[i][j] instanceof King) {
 						King reCheck = (King) bobbyFisher[i][j];
 						
@@ -299,7 +302,7 @@ public class WhiteClient extends Application {
 						if (space.getFirst() == mover.getColumn() && space.getSecond() == mover.getRow()) {
 							out.setFill(Color.rgb(80, 80, 80, 0.75));
 							out.fillRect(space.getFirst() * 80, space.getSecond() * 80, 80, 80);
-							out.drawImage(new Image(mover.graphic()), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
+							out.drawImage(drawer.retrieveImage(mover.graphic()), mover.getColumn() * 80, mover.getRow() * 80, 80, 80);
 
 							// all other possible moves are highlighted using
 							// sea foam green circles
@@ -377,4 +380,21 @@ public class WhiteClient extends Application {
 			} // end if/else
 		} // end internal method
 	} // end class
+	
+	private class FlyWeight {
+		private HashMap<String, Image> images;
+		
+		public FlyWeight() {
+			images = new HashMap<>();
+		}
+		
+		public Image retrieveImage(String in) {
+			String url = "file:images/" + in + ".png";
+			if (!images.containsKey(url)) {
+				images.put(in, new Image(url));
+			}
+			
+			return images.get(in);
+		}
+	}
 } // end class
