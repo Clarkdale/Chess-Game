@@ -55,7 +55,7 @@ public class WhiteClient extends Application {
 		window.getIcons().add(new Image("file:images/WhiteKnight.png"));
 		// overall borderpain created
 		BorderPane rootPane = new BorderPane();
-		
+
 		drawer = new FlyWeight();
 
 		// Interactive window is made, which will later have a listener for clicking
@@ -78,7 +78,7 @@ public class WhiteClient extends Application {
 		window.setScene(display);
 		window.show();
 	} // end method
-  
+
 	/*====================================================================
     Method Name:  openConnection
         Purpose:  Connects this client to the overall server. This is
@@ -91,38 +91,38 @@ public class WhiteClient extends Application {
 
 		try {
 			//InetAddress add = InetAddress.getByName("150.135.165.4");
-			
+
 			//socket is connected to, in this case it is the local host for
 			//testing purposes
 			socket = new Socket("localhost", 4000);
-			
+
 			//output and input to server is initialized, so objects can be sent
 			//between the cleints and servers
 			outputToServer = new ObjectOutputStream(socket.getOutputStream());
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
-			
+
 			//board variable set to the vector recieved from the server, which
 			//is then converted to a 2D Piece array
 			bobbyFisher = DataStructureConverter.vectorToArrayWhite((List<List<Piece>>) inputFromServer.readObject());
 			turn = (boolean) inputFromServer.readObject();
 			findKing();
-			
+
 			ServerReader listener = new ServerReader();
 
 			printBoard();
-			
+
 			//thread started
 			Thread thread = new Thread(listener);
 			thread.start();
 		} catch (IOException | ClassNotFoundException e) {
 		} //end try/catch
 	} //end method
-  
+
 	/*====================================================================
     Class Name:  ServerReader
-       Purpose:  A thread for running this client. This client recieves 
+       Purpose:  A thread for running this client. This client recieves
                  data from the server and updates the screen, as well
-                 as synchronizes this thread, so that there are no 
+                 as synchronizes this thread, so that there are no
                  race conditions.
   Parent Class:  Runnable
 	   @author:  Clark D Penado
@@ -132,7 +132,7 @@ public class WhiteClient extends Application {
 		@Override
 		public synchronized void run() {
 			try {
-				
+
 				//while true is used to keep thread running while connected
 				//to server
 				while (true) {
@@ -155,7 +155,7 @@ public class WhiteClient extends Application {
 			} //end try/catch
 		} //end method
 	} //end class
-	
+
 	/*====================================================================
     Method Name:  findKing
         Purpose:  updates the global king variable from the board by parsing
@@ -167,9 +167,9 @@ public class WhiteClient extends Application {
 		// nested for loop used for iterating over each piece
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (bobbyFisher[i][j] != null && bobbyFisher[i][j].type() && (bobbyFisher[i][j] instanceof King)) 
+				if (bobbyFisher[i][j] != null && bobbyFisher[i][j].type() && (bobbyFisher[i][j] instanceof King))
 					king = (King) bobbyFisher[i][j];
-				
+
 			} // end for
 		} // end for
 	} // end method
@@ -225,7 +225,7 @@ public class WhiteClient extends Application {
 					out.drawImage(drawer.retrieveImage(bobbyFisher[i][j].graphic()), j * 80, i * 80, 80, 80);
 					if (bobbyFisher[i][j] instanceof King) {
 						King reCheck = (King) bobbyFisher[i][j];
-						
+
 						//a red transparent square is drawn over the king if the
 						// king is in check
 						if (reCheck.inCheck(bobbyFisher)) {
@@ -240,7 +240,7 @@ public class WhiteClient extends Application {
 
 	/*====================================================================
     Class Name:  MoveHandler
-       Purpose:  Allows the user to click around on the gameboard, 
+       Purpose:  Allows the user to click around on the gameboard,
                  moving pieces when necessary around the board
                  and sending the moves back to the server
   Parent Class:  EventHandler
@@ -274,7 +274,7 @@ public class WhiteClient extends Application {
 				// this block checks every move that might be valid while the user
 				// is in check. If the user is not, then the set of possible moves
 				// is just the default one returned from the corresponding piece object
-				if (mover != null) {				
+				if (mover != null) {
 					if (!king.inCheck(bobbyFisher)) {
 						potential = mover.move(bobbyFisher);
 					} else {
@@ -287,7 +287,7 @@ public class WhiteClient extends Application {
 								potential.add(each);
 							bobbyFisher[each.getSecond()][each.getFirst()] = holder;
 						} // end for
-						
+
 						//Moving the piece to its original location is always valid
 						Tuple last = new Tuple(x, y);
 						potential.add(last);
@@ -355,7 +355,7 @@ public class WhiteClient extends Application {
 							} // end if/ else
 						} // end if
 					} // end if
-					
+
 					boolean out = true;
 					if (mover.getColumn() != x || mover.getRow() != y)
 						out = false;
@@ -363,7 +363,7 @@ public class WhiteClient extends Application {
 					// according to where it was moved on the board
 					mover.setX(x);
 					mover.setY(y);
-				
+
 					// board is adjusted after move to fully represent game
 					bobbyFisher[y][x] = mover;
 
@@ -397,4 +397,5 @@ public class WhiteClient extends Application {
 			return images.get(in);
 		}
 	}
+	
 } // end class

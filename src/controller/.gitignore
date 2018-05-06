@@ -17,3 +17,6 @@
 /Client$ServerReader.class
 /Client$ServerReader$1.class
 /MasterClient.class
+/MasterClient$FlyWeight.class
+/MasterClient$MoveHandler.class
+/MasterClient$ServerReader.class

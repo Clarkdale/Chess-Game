@@ -38,9 +38,9 @@ public class Server {
 				
 				if (inputClient == null) {
 					inputClient = inputFromClient;
-					outputToClient.writeBoolean(true);
+					outputToClient.writeObject(true);
 				} else {
-					outputToClient.writeBoolean(false);
+					outputToClient.writeObject(false);
 					ClientHandler clientHandler = new ClientHandler(inputClient, inputFromClient);
 					inputClient = null;
 					Thread thread = new Thread(clientHandler);
@@ -79,7 +79,6 @@ public class Server {
 					if (turn) {
 						int [] start = (int []) first.readObject();
 						int [] end = (int []) first.readObject();
-						streams.get(first).writeBoolean(false);
 						
 						start[0] = (start[0] - 7) * -1;
 						start[1] = (start[1] - 7) * -1;
@@ -88,12 +87,11 @@ public class Server {
 						
 						streams.get(second).writeObject(start);
 						streams.get(second).writeObject(end);
-						streams.get(second).writeBoolean(true);
+						streams.get(second).writeObject(true);
 						turn = !turn;
 					} else {
 						int [] start = (int []) second.readObject();
 						int [] end = (int []) second.readObject();
-						streams.get(second).writeBoolean(false);
 						
 						start[0] = (start[0] - 7) * -1;
 						start[1] = (start[1] - 7) * -1;
