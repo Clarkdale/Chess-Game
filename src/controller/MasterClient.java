@@ -82,6 +82,7 @@ public class MasterClient extends Application {
 		bobbyFischer[7][1] = new Knight(1, 7, turn, true);
 		bobbyFischer[0][2] = new Bishop(2, 0, !turn, false);
 		bobbyFischer[7][2] = new Bishop(2, 7, turn, true);
+		
 		if (turn) {
 			bobbyFischer[0][3] = new Queen(3, 0, !turn, false);
 			bobbyFischer[0][4] = new King(4, 0, !turn, false);
@@ -291,32 +292,41 @@ public class MasterClient extends Application {
 					if (mover.getColumn() != x || mover.getRow() != y) {
 						turn = !turn;
 					} // end if
-
+					
+					//TODO: Implement castling on both sides of the board,
+					//so both rooks are valid for castling on either side.
+					//This should also enable black to properly castle, and
+					//create the frameworks for the network castle update
+					
 					// additional logic to allow castling
-					if (mover instanceof King && x == 6) {
-						King re = (King) mover;
-						// helper method from king class used to prevent unintentional
-						// movement of the rook
-						if (re.castle()) {
-							Piece assist;
-							// White side
-							if (mover.type()) {
+					if (mover instanceof King) {
+						if (x == 6) {
+							King re = (King) mover;
+							// helper method from king class used to prevent unintentional
+							// movement of the rook
+							if (re.castle()) {
+								Piece assist;
 								assist = (Rook) bobbyFischer[7][7];
 								assist.setX(5);
 								assist.setY(7);
 								bobbyFischer[7][7] = null;
 								bobbyFischer[7][5] = assist;
+							} // end if
+						} else if (x == 1) {
+							King re = (King) mover;
+							// helper method from king class used to prevent unintentional
+							// movement of the rook
+							if (re.castle()) {
+								Piece assist;
+								assist = (Rook) bobbyFischer[7][0];
+								assist.setX(2);
+								assist.setY(7);
+								bobbyFischer[7][0] = null;
+								bobbyFischer[7][2] = assist;
 
-								// black side
-							} else {
-								assist = (Rook) bobbyFischer[0][7];
-								assist.setX(5);
-								assist.setY(0);
-								bobbyFischer[0][7] = null;
-								bobbyFischer[0][5] = assist;
-							} // end if/ else
-						} // end if
-					} // end if
+							} // end if
+						}
+					}
 
 					boolean out = true;
 					if (mover.getColumn() != x || mover.getRow() != y)
@@ -331,20 +341,20 @@ public class MasterClient extends Application {
 
 					// mover is reset to null for next move
 					mover = null;
-
-					try {
-						printBoard();
-						outputToServer.writeObject(past);
-						int [] toWrite = new int [2];
-						toWrite[0] = x;
-						toWrite[1] = y;
-						outputToServer.writeObject(toWrite);
-					} catch (IOException e) {
-					} //end try/catch
+					printBoard();
+					if (past[0] != x || past[1] != y) {
+						try {
+							outputToServer.writeObject(past);
+							int [] toWrite = new int [2];
+							toWrite[0] = x;
+							toWrite[1] = y;
+							outputToServer.writeObject(toWrite);
+						} catch (IOException e) {
+						} //end try/catch
+					}
 				} //end if
 			}
 		}
-		
 	}
 	
 	private class FlyWeight {
