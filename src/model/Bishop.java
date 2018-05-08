@@ -27,11 +27,11 @@ public class Bishop extends Piece {
 
 	public String graphic() {
 		if (super.type()) {
-			return ("file:images/WhiteBishop.png");
+			return ("WhiteBishop");
 			// return (new
 			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/mccann.jpg"));
 		} else {
-			return ("file:images/BlackBishop.png");
+			return ("BlackBishop");
 			// return (new
 			// Image("https://www.amrita.edu/site/ISSISP2016/images/ChristianCollberg.jpg"));
 		} // end if/else

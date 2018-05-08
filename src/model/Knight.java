@@ -90,11 +90,11 @@ public class Knight extends Piece {
 
 	public String graphic() {
 		if (super.type()) {
-			return ("file:images/WhiteKnight.png");
+			return ("WhiteKnight");
 			// return (new
 			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/full_width_12_column/public/media/proebsting4_0.png"));
 		} else {
-			return ("file:images/BlackKnight.png");
+			return ("BlackKnight");
 			// return (new
 			// Image("https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAIA_wDGAAAAAQAAAAAAAAqFAAAAJGM5YmU3MjU5LTJmOTItNGQzYS1iY2U5LTc4NjMxMTY2MmNkNg.jpg"));
 		} // end if/else

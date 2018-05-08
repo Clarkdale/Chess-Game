@@ -29,11 +29,11 @@ public class Queen extends Piece {
 
 	public String graphic() {
 		if (super.type()) {
-			return ("file:images/WhiteQueen.png");
+			return ("WhiteQueen");
 			// return (new
 			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/allison2.jpg"));
 		} else {
-			return ("file:images/BlackQueen.png");
+			return ("BlackQueen");
 			// return (new
 			// Image("https://www.cs.arizona.edu/sites/cs/files/styles/medium/public/images/people/obagy_0.jpg"));
 		} // end if/else
