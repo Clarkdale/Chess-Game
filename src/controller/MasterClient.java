@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -192,8 +191,6 @@ public class MasterClient extends Application {
 	
 	private class ServerReader implements Runnable {
 		
-		private Piece holder;
-		
 		@Override
 		public synchronized void run() {
 			try {
@@ -335,11 +332,6 @@ public class MasterClient extends Application {
 						}
 					}
 
-					boolean out = true;
-					if (mover.getColumn() != x || mover.getRow() != y)
-						out = false;
-					// these statements will changeg the piece object
-					// according to where it was moved on the board
 					mover.setX(x);
 					mover.setY(y);
 
