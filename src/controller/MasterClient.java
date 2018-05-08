@@ -77,7 +77,7 @@ public class MasterClient extends Application {
 		bobbyFischer = new Piece [8][8];
 		
 		bobbyFischer[0][0] = new Rook(0, 0, !turn, false);
-		bobbyFischer[7][0] = new Rook(7, 0, turn, true);
+		bobbyFischer[7][0] = new Rook(0, 7, turn, true);
 		bobbyFischer[0][1] = new Knight(1, 0, !turn, false);
 		bobbyFischer[7][1] = new Knight(1, 7, turn, true);
 		bobbyFischer[0][2] = new Bishop(2, 0, !turn, false);
@@ -203,10 +203,28 @@ public class MasterClient extends Application {
 					
 					turn = (boolean) inputFromServer.readObject();
 					
-					bobbyFischer[two[1]][two[0]] = bobbyFischer[one[1]][one[0]];
-					bobbyFischer[two[1]][two[0]].setX(two[0]);
-					bobbyFischer[two[1]][two[0]].setY(two[1]);
+					if (bobbyFischer[one[1]][one[0]] instanceof King) {
+						if (two[0] == 1) {
+							King re = (King) bobbyFischer[one[1]][one[0]];
+							if (re.castle()) {
+								bobbyFischer[0][0].setX(2);
+								bobbyFischer[0][2] = bobbyFischer[0][0];
+								bobbyFischer[0][0] = null;
+							}
+							
+						} else if (two[0] == 6) {
+							King re = (King) bobbyFischer[one[1]][one[0]];
+							if (re.castle()) {
+								bobbyFischer[0][7].setX(5);
+								bobbyFischer[0][5] = bobbyFischer[0][7];
+								bobbyFischer[0][7] = null;
+							}
+						}
+					}
 					
+					bobbyFischer[one[1]][one[0]].setX(two[0]);
+					bobbyFischer[one[1]][one[0]].setY(two[1]);
+					bobbyFischer[two[1]][two[0]] = bobbyFischer[one[1]][one[0]];
 					bobbyFischer[one[1]][one[0]] = null;
 					
 					printBoard();
@@ -288,11 +306,6 @@ public class MasterClient extends Application {
 					if (mover.getColumn() != x || mover.getRow() != y) {
 						turn = !turn;
 					} // end if
-					
-					//TODO: Implement castling on both sides of the board,
-					//so both rooks are valid for castling on either side.
-					//This should also enable black to properly castle, and
-					//create the frameworks for the network castle update
 					
 					// additional logic to allow castling
 					if (mover instanceof King) {

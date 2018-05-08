@@ -60,28 +60,24 @@ public class King extends Piece {
         Returns:  boolean value concerning if that space is threatened
  	====================================================================*/
 	public boolean moveCheck(Piece [][] in, int x, int y) {
+		
 		Set<Piece> opposite = new HashSet<>();
 		
-		//all enemy pieces are added to the opposite set
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (in[i][j] != null && in[i][j].type() != this.type())
+				if (in[i][j] != null && in[i][j].type() != this.type() && !(in[i][j] instanceof King)) {
 					opposite.add(in[i][j]);
-			} //end for
-		} //end for
+				}
+			}
+		}
 		
-		// for loop moves over enemy pieces, and checks their move set. If
-		// any of the tuples inside of this set match the x and y value passed
-		// in, the space is threatened. Kings are not checked to avoid stack
-		// overflow
 		for (Piece enemy : opposite) {
-			if (!(enemy instanceof King)) {
-				for (Tuple move : in[enemy.getRow()][enemy.getColumn()].move(in)) {
-					if (x == move.getFirst() && y == move.getSecond())
-						return true;
-				} // end for
-			} //end if
-		} // end for
+			for (Tuple move : enemy.move(in)) {
+				if (move.getFirst() == x && move.getSecond() == y) {
+					return true;
+				}
+			}
+		}
 		
 		// following boolean logic handles case where there is a king 
 		// in a neighboring position. This assists in preventing stack
