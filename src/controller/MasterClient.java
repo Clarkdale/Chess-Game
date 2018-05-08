@@ -165,7 +165,7 @@ public class MasterClient extends Application {
 		// nested for loop used for iterating over each piece
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (bobbyFischer[i][j] != null && bobbyFischer[i][j].type() && (bobbyFischer[i][j] instanceof King))
+				if (bobbyFischer[i][j] != null && bobbyFischer[i][j].type() == turn && (bobbyFischer[i][j] instanceof King))
 					king = (King) bobbyFischer[i][j];
 
 			} // end for
@@ -256,23 +256,21 @@ public class MasterClient extends Application {
 				}
 				
 				if (mover != null) {
-					if (!king.inCheck(bobbyFischer)) {
-						potential = mover.move(bobbyFischer);
-					} else {
-						Set<Tuple> prelim = mover.move(bobbyFischer);
-						potential = new HashSet<>();
-						for (Tuple each : prelim) {
-							Piece holder = bobbyFischer[each.getSecond()][each.getFirst()];
-							bobbyFischer[each.getSecond()][each.getFirst()] = mover;
-							if (!king.inCheck(bobbyFischer))
-								potential.add(each);
-							bobbyFischer[each.getSecond()][each.getFirst()] = holder;
-						} // end for
-
-						//Moving the piece to its original location is always valid
-						Tuple last = new Tuple(x, y);
-						potential.add(last);
+					
+					Set<Tuple> prelim = mover.move(bobbyFischer);
+					potential = new HashSet<>();
+					for (Tuple each : prelim) {
+						Piece holder = bobbyFischer[each.getSecond()][each.getFirst()];
+						bobbyFischer[each.getSecond()][each.getFirst()] = mover;
+						if (!king.inCheck(bobbyFischer)) {
+							potential.add(each);
+						}
+						
+						bobbyFischer[each.getSecond()][each.getFirst()] = holder;
 					}
+					
+					Tuple last = new Tuple(x, y);
+					potential.add(last);
 					
 					// this for loop will parse over all the possible moves,
 					// and highlight where the player can move based on
