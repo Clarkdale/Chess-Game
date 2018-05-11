@@ -124,6 +124,24 @@ public class King extends Piece {
 		
 		return false;
 	} // end method
+	
+	public boolean checkMate(Piece [][] in) {
+		Set<Piece> own = new HashSet<>();
+		for (Piece [] row : in) {
+			for (Piece individ : row) {
+				if (individ.type() == this.type()) {
+					own.add(individ);
+				}
+			}
+		}
+		
+		for (Piece check : own) {
+			if (check.move(in).size() > 1) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public int getRow() {
 		return super.getRow();

@@ -19,12 +19,12 @@ public class Server {
 	private static ServerSocket serverSocket;
 	private static HashMap<ObjectInputStream, ObjectOutputStream> streams = new HashMap<>();
 	private static ObjectInputStream inputClient;
-	private static boolean turn = true;
+	private static boolean turn = false;
 
 	public static void main(String [] args) throws IOException {
 		try {
 			//socket created at designated number passed in
-			serverSocket = new ServerSocket(4000);
+			serverSocket = new ServerSocket(3333);
 			
 			//while true maintains the server open and the output/input 
 			//streams flowing between the server and clients
@@ -38,9 +38,9 @@ public class Server {
 				
 				if (inputClient == null) {
 					inputClient = inputFromClient;
-					outputToClient.writeObject(true);
-				} else {
 					outputToClient.writeObject(false);
+				} else {
+					outputToClient.writeObject(true);
 					ClientHandler clientHandler = new ClientHandler(inputClient, inputFromClient);
 					inputClient = null;
 					Thread thread = new Thread(clientHandler);
@@ -49,7 +49,7 @@ public class Server {
 			} //end while
 			
 		} catch (IOException e) {
-			System.out.println("Something went wrong");
+			e.printStackTrace();
 		} //end try/catch
 	} //end method
 	

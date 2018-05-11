@@ -173,7 +173,7 @@ public class MasterClient extends Application {
 	
 	private void openConnection() {
 		try {
-			socket = new Socket("localhost", 4000);
+			socket = new Socket("localhost", 3333);
 			
 			outputToServer = new ObjectOutputStream(socket.getOutputStream());
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
